@@ -1,0 +1,2312 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cafetería CECyTEM</title>
+
+    <link rel="stylesheet" href="cafeteria.css">
+
+    <link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#006b3f">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<meta name="apple-mobile-web-app-title" content="Cafetería CECyTEM">
+
+<link rel="apple-touch-icon" href="imagenes/icon-192.png">
+</head>
+
+<body>
+
+<!-- ==========================================
+     ENCABEZADO
+========================================== -->
+
+<header>
+
+    <div class="encabezado">
+
+        <img src="imagenes/cecylogo.jpg"
+             alt="Logo CECyTEM"
+             class="logo-cecytem">
+
+        <div class="titulo-cafeteria">
+
+            <h1>CAFETERÍA CECyTEM</h1>
+
+            <p>
+                Sabor, energía y bienestar para nuestra comunidad estudiantil
+            </p>
+
+            <span>
+                🏫 Menú escolar • 🍔 Comida • 🎙️ Asistente de voz
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ==========================================
+     INICIO
+========================================== -->
+
+<section id="inicio">
+
+    <div class="bienvenida">
+
+        <h2>🍽️ Menú de la semana</h2>
+
+        <p>
+            Consulta las comidas disponibles cada día
+            y realiza tu pedido fácilmente.
+        </p>
+
+    </div>
+
+
+    <div class="botones-dias">
+
+        <button onclick="abrirDia('lunes')">📅 Lunes</button>
+
+        <button onclick="abrirDia('martes')">📅 Martes</button>
+
+        <button onclick="abrirDia('miercoles')">📅 Miércoles</button>
+
+        <button onclick="abrirDia('jueves')">📅 Jueves</button>
+
+        <button onclick="abrirDia('viernes')">📅 Viernes</button>
+
+    </div>
+
+
+    <!-- ==========================================
+         ASISTENTE
+    ========================================== -->
+
+    <div class="asistente">
+
+        <h3>🎙️ Asistente de la cafetería</h3>
+
+        <p>
+            Puedes preguntarme qué hay de comer, consultar precios
+            o hacer un pedido con varios productos.
+        </p>
+
+        <button class="btn-voz"
+                onclick="iniciarAsistente()">
+
+            🎙️ Hablar con el asistente
+
+        </button>
+
+        <p id="estadoVoz">
+            Presiona el botón y dime qué necesitas.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+     LUNES
+========================================== -->
+
+<section id="lunes" class="menu-dia">
+
+    <h2>🍽️ Menú del Lunes</h2>
+
+    <div class="productos">
+
+        <div class="producto">
+
+            <img src="imagenes/imagestacosdorados.jpg"
+                 alt="Tacos dorados">
+
+            <h3>Tacos dorados de pollo</h3>
+
+            <p>
+                Tacos dorados de pollo con
+                lechuga, crema y queso.
+            </p>
+
+            <p class="precio">$35</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Tacos dorados de pollo',35)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/tortajamon.jpg"
+                 alt="Torta de jamón">
+
+            <h3>Torta de jamón y queso</h3>
+
+            <p>
+                Torta con jamón, queso,
+                lechuga, jitomate y aguacate.
+            </p>
+
+            <p class="precio">$40</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Torta de jamón y queso',40)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/imagesyogurt.jpg"
+                 alt="Yogur con fruta">
+
+            <h3>Yogur con fruta</h3>
+
+            <p>
+                Yogur natural con fruta
+                fresca y granola.
+            </p>
+
+            <p class="precio">$30</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Yogur con fruta',30)">
+                Pedir
+            </button>
+
+        </div>
+
+    </div>
+
+    <button class="btn-salir"
+            onclick="regresarInicio()">
+        ← Regresar
+    </button>
+
+</section>
+
+
+<!-- ==========================================
+     MARTES
+========================================== -->
+
+<section id="martes" class="menu-dia">
+
+    <h2>🍽️ Menú del Martes</h2>
+
+    <div class="productos">
+
+        <div class="producto">
+
+            <img src="imagenes/Hamburguesa.jpg"
+                 alt="Hamburguesa">
+
+            <h3>Hamburguesa</h3>
+
+            <p>
+                Hamburguesa con carne,
+                queso, lechuga y jitomate.
+            </p>
+
+            <p class="precio">$50</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Hamburguesa',50)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/imagesburrito.jpg"
+                 alt="Burrito">
+
+            <h3>Burrito de pollo</h3>
+
+            <p>
+                Burrito de pollo con arroz,
+                frijoles, queso y verduras.
+            </p>
+
+            <p class="precio">$40</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Burrito de pollo',40)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/imageshotcakes.jpg"
+                 alt="Hot cakes">
+
+            <h3>Hot cakes con fruta</h3>
+
+            <p>
+                Hot cakes con fruta
+                fresca y miel.
+            </p>
+
+            <p class="precio">$35</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Hot cakes con fruta',35)">
+                Pedir
+            </button>
+
+        </div>
+
+    </div>
+
+    <button class="btn-salir"
+            onclick="regresarInicio()">
+        ← Regresar
+    </button>
+
+</section>
+
+
+<!-- ==========================================
+     MIÉRCOLES
+========================================== -->
+
+<section id="miercoles" class="menu-dia">
+
+    <h2>🍽️ Menú del Miércoles</h2>
+
+    <div class="productos">
+
+        <div class="producto">
+
+            <img src="imagenes/imagesquesadillas.jpg"
+                 alt="Quesadillas">
+
+            <h3>Quesadillas de queso y jamón</h3>
+
+            <p>
+                Quesadillas calientes
+                con queso y jamón.
+            </p>
+
+            <p class="precio">$30</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Quesadillas de queso y jamón',30)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/imageshotdog.jpg"
+                 alt="Hot dog">
+
+            <h3>Hot dog con papas</h3>
+
+            <p>
+                Hot dog con salchicha,
+                jitomate, cebolla y papas.
+            </p>
+
+            <p class="precio">$35</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Hot dog con papas',35)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/imageslicuado.jpg"
+                 alt="Licuado de plátano">
+
+            <h3>Licuado de plátano</h3>
+
+            <p>
+                Licuado de plátano
+                con leche y canela.
+            </p>
+
+            <p class="precio">$30</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Licuado de plátano',30)">
+                Pedir
+            </button>
+
+        </div>
+
+    </div>
+
+    <button class="btn-salir"
+            onclick="regresarInicio()">
+        ← Regresar
+    </button>
+
+</section>
+
+
+<!-- ==========================================
+     JUEVES
+========================================== -->
+
+<section id="jueves" class="menu-dia">
+
+    <h2>🍽️ Menú del Jueves</h2>
+
+    <div class="productos">
+
+        <div class="producto">
+
+            <img src="imagenes/imagestortamilanesa.jpg"
+                 alt="Torta de milanesa">
+
+            <h3>Torta de milanesa</h3>
+
+            <p>
+                Torta de milanesa con
+                lechuga, queso y aguacate.
+            </p>
+
+            <p class="precio">$45</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Torta de milanesa',45)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/imagestacosbistec.jpg"
+                 alt="Tacos de bistec">
+
+            <h3>Tacos de bistec</h3>
+
+            <p>
+                Tacos de bistec con
+                cebolla, cilantro y salsa.
+            </p>
+
+            <p class="precio">$45</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Tacos de bistec',45)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/imagesensaladafrutas.jpg"
+                 alt="Ensalada de frutas">
+
+            <h3>Ensalada de frutas</h3>
+
+            <p>
+                Frutas frescas
+                con yogur.
+            </p>
+
+            <p class="precio">$30</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Ensalada de frutas',30)">
+                Pedir
+            </button>
+
+        </div>
+
+    </div>
+
+    <button class="btn-salir"
+            onclick="regresarInicio()">
+        ← Regresar
+    </button>
+
+</section>
+
+
+<!-- ==========================================
+     VIERNES
+========================================== -->
+
+<section id="viernes" class="menu-dia">
+
+    <h2>🍽️ Menú del Viernes</h2>
+
+    <div class="productos">
+
+        <div class="producto">
+
+            <img src="imagenes/imagespizza.jpg"
+                 alt="Pizza">
+
+            <h3>Pizza individual</h3>
+
+            <p>
+                Pizza individual con
+                queso y pepperoni.
+            </p>
+
+            <p class="precio">$45</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Pizza individual',45)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/clubsandwich.jpg"
+                 alt="Club sandwich">
+
+            <h3>Club sándwich</h3>
+
+            <p>
+                Sándwich con jamón,
+                queso, pollo y verduras.
+            </p>
+
+            <p class="precio">$45</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Club sándwich',45)">
+                Pedir
+            </button>
+
+        </div>
+
+
+        <div class="producto">
+
+            <img src="imagenes/waffles.jpg"
+                 alt="Waffles">
+
+            <h3>Waffles con fruta</h3>
+
+            <p>
+                Waffles con fruta
+                fresca y miel.
+            </p>
+
+            <p class="precio">$40</p>
+
+            <button class="btn-pedir"
+                    onclick="abrirPedido('Waffles con fruta',40)">
+                Pedir
+            </button>
+
+        </div>
+
+    </div>
+
+    <button class="btn-salir"
+            onclick="regresarInicio()">
+        ← Regresar
+    </button>
+
+</section>
+
+
+<!-- ==========================================
+     FORMULARIO DE PEDIDO
+========================================== -->
+
+<div id="ventanaPedido" class="modal">
+
+    <div class="formulario">
+
+        <h2>🛒 Realizar pedido</h2>
+
+        <!-- RESUMEN -->
+        <div id="resumenPedido" class="resumen-pedido">
+
+            <h3>Tu pedido</h3>
+
+            <div id="listaPedido">
+                No hay productos agregados.
+            </div>
+
+            <div class="total-pedido">
+
+                <span>Total:</span>
+
+                <span id="totalPedido">
+                    $0.00
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <form onsubmit="confirmarPedido(event)">
+
+            <label for="nombre">
+                Nombre del estudiante:
+            </label>
+
+            <input type="text"
+                   id="nombre"
+                   placeholder="Escribe tu nombre"
+                   required>
+
+
+            <label for="grupo">
+                Grupo:
+            </label>
+
+            <input type="text"
+                   id="grupo"
+                   placeholder="Ejemplo: 502"
+                   required>
+
+
+            <button type="submit"
+                    class="btn-confirmar">
+
+                ✓ Continuar al pago
+
+            </button>
+
+
+            <button type="button"
+                    class="btn-cancelar"
+                    onclick="cerrarPedido()">
+
+                Cancelar
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     FORMAS DE PAGO
+========================================== -->
+
+<div id="ventanaPago" class="modal">
+
+    <div class="formulario pago-formulario">
+
+        <div class="icono-pago">
+            💳
+        </div>
+
+        <h2>Forma de pago</h2>
+
+        <p class="texto-pago">
+            Selecciona cómo deseas pagar tu pedido.
+        </p>
+
+
+        <div class="resumen-pedido">
+
+            <h3>Resumen</h3>
+
+            <div id="resumenPago"></div>
+
+            <div class="total-pedido">
+
+                <span>Total:</span>
+
+                <span id="totalPago">
+                    $0.00
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="opciones-pago">
+
+            <button type="button"
+                    class="opcion-pago"
+                    onclick="mostrarTransferencia()">
+
+                <span class="icono-opcion">
+                    🏦
+                </span>
+
+                <div>
+
+                    <strong>
+                        Transferencia bancaria
+                    </strong>
+
+                    <small>
+                        Paga desde tu aplicación bancaria
+                    </small>
+
+                </div>
+
+            </button>
+
+
+            <button type="button"
+                    class="opcion-pago"
+                    onclick="mostrarEfectivo()">
+
+                <span class="icono-opcion">
+                    💵
+                </span>
+
+                <div>
+
+                    <strong>
+                        Pago en efectivo
+                    </strong>
+
+                    <small>
+                        Paga directamente en la cafetería
+                    </small>
+
+                </div>
+
+            </button>
+
+        </div>
+
+
+        <button type="button"
+                class="btn-cancelar"
+                onclick="cerrarPago()">
+
+            Cancelar
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     TRANSFERENCIA
+========================================== -->
+
+<div id="ventanaTransferencia" class="modal">
+
+    <div class="formulario transferencia-formulario">
+
+        <div class="icono-pago">
+            🏦
+        </div>
+
+        <h2>
+            Pago por transferencia
+        </h2>
+
+        <p class="texto-pago">
+            Realiza tu transferencia con los siguientes datos:
+        </p>
+
+
+        <div class="datos-transferencia">
+
+            <div class="dato-bancario">
+
+                <span>🏦 Banco</span>
+
+                <strong>
+                    Banco de ejemplo
+                </strong>
+
+            </div>
+
+
+            <div class="dato-bancario">
+
+                <span>👤 Beneficiario</span>
+
+                <strong>
+                    Cafetería CECyTEM
+                </strong>
+
+            </div>
+
+
+            <div class="dato-bancario">
+
+                <span>💳 Número de cuenta</span>
+
+                <strong>
+                    0000000000
+                </strong>
+
+            </div>
+
+
+            <div class="dato-bancario">
+
+                <span>🔢 CLABE interbancaria</span>
+
+                <strong>
+                    000000000000000000
+                </strong>
+
+            </div>
+
+
+            <div class="dato-bancario monto-transferencia">
+
+                <span>💰 Monto a pagar</span>
+
+                <strong id="montoTransferencia">
+                    $0.00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <p class="aviso-transferencia">
+
+            ⚠️ Realiza la transferencia por el monto
+            exacto de tu pedido.
+
+        </p>
+
+
+        <label for="comprobante">
+            Comprobante de transferencia
+        </label>
+
+        <input type="file"
+               id="comprobante"
+               accept="image/*,.pdf">
+
+
+        <button type="button"
+                class="btn-confirmar"
+                onclick="confirmarTransferencia()">
+
+            📤 Enviar comprobante
+
+        </button>
+
+
+        <button type="button"
+                class="btn-cancelar"
+                onclick="cerrarTransferencia()">
+
+            ← Regresar
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     EFECTIVO
+========================================== -->
+
+<div id="ventanaEfectivo" class="modal">
+
+    <div class="formulario pago-formulario">
+
+        <div class="icono-pago">
+            💵
+        </div>
+
+        <h2>
+            Pago en efectivo
+        </h2>
+
+        <p class="texto-pago">
+
+            Tu pedido quedará registrado para realizar
+            el pago directamente en la cafetería.
+
+        </p>
+
+
+        <div class="efectivo-info">
+
+            <p>
+                🧾 <strong>Pedido:</strong>
+                <span id="pedidoEfectivo"></span>
+            </p>
+
+            <p>
+                💰 <strong>Total:</strong>
+                <span id="totalEfectivo"></span>
+            </p>
+
+        </div>
+
+
+        <button type="button"
+                class="btn-confirmar"
+                onclick="confirmarEfectivo()">
+
+            ✅ Confirmar pedido
+
+        </button>
+
+
+        <button type="button"
+                class="btn-cancelar"
+                onclick="cerrarEfectivo()">
+
+            Cancelar
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     PEDIDO REALIZADO
+========================================== -->
+
+<div id="pedidoRealizado" class="modal">
+
+    <div class="formulario">
+
+        <h2>
+            ✅ ¡Pedido realizado!
+        </h2>
+
+        <p id="mensajePedido"></p>
+
+        <button class="btn-confirmar"
+                onclick="cerrarPedidoYRegresar()">
+
+            Regresar al inicio
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+    <div class="footer-contenido">
+
+        <h3>
+            🏫 CAFETERÍA CECyTEM
+        </h3>
+
+        <p>
+            Sabor, energía y bienestar para nuestra comunidad estudiantil.
+        </p>
+
+        <p>
+            🍔 Menú escolar • 🎙️ Asistente de voz • 🛒 Pedidos • 💳 Pagos
+        </p>
+
+        <p class="copyright">
+            © 2026 Cafetería CECyTEM
+        </p>
+
+    </div>
+
+</footer>
+
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
+
+<script>
+
+/* ==========================================
+   CATÁLOGO DE PRODUCTOS
+========================================== */
+
+const productosDisponibles = [
+
+    {
+        nombre: "Tacos dorados de pollo",
+        precio: 35,
+        palabras: [
+            "tacos dorados",
+            "taco dorado",
+            "tacos de pollo"
+        ]
+    },
+
+    {
+        nombre: "Torta de jamón y queso",
+        precio: 40,
+        palabras: [
+            "torta de jamon",
+            "torta jamon"
+        ]
+    },
+
+    {
+        nombre: "Yogur con fruta",
+        precio: 30,
+        palabras: [
+            "yogur",
+            "yogurt"
+        ]
+    },
+
+    {
+        nombre: "Hamburguesa",
+        precio: 50,
+        palabras: [
+            "hamburguesa",
+            "hamburguesas"
+        ]
+    },
+
+    {
+        nombre: "Burrito de pollo",
+        precio: 40,
+        palabras: [
+            "burrito",
+            "burritos"
+        ]
+    },
+
+    {
+        nombre: "Hot cakes con fruta",
+        precio: 35,
+        palabras: [
+            "hot cakes",
+            "hotcakes",
+            "hot cake"
+        ]
+    },
+
+    {
+        nombre: "Quesadillas de queso y jamón",
+        precio: 30,
+        palabras: [
+            "quesadilla",
+            "quesadillas"
+        ]
+    },
+
+    {
+        nombre: "Hot dog con papas",
+        precio: 35,
+        palabras: [
+            "hot dog",
+            "hotdog",
+            "hot dogs"
+        ]
+    },
+
+    {
+        nombre: "Licuado de plátano",
+        precio: 30,
+        palabras: [
+            "licuado",
+            "licuado de platano"
+        ]
+    },
+
+    {
+        nombre: "Torta de milanesa",
+        precio: 45,
+        palabras: [
+            "milanesa",
+            "torta de milanesa"
+        ]
+    },
+
+    {
+        nombre: "Tacos de bistec",
+        precio: 45,
+        palabras: [
+            "bistec",
+            "tacos de bistec"
+        ]
+    },
+
+    {
+        nombre: "Ensalada de frutas",
+        precio: 30,
+        palabras: [
+            "ensalada",
+            "ensalada de frutas"
+        ]
+    },
+
+    {
+        nombre: "Pizza individual",
+        precio: 45,
+        palabras: [
+            "pizza",
+            "pizzas"
+        ]
+    },
+
+    {
+        nombre: "Club sándwich",
+        precio: 45,
+        palabras: [
+            "sandwich",
+            "sándwich",
+            "club sandwich",
+            "club sándwich"
+        ]
+    },
+
+    {
+        nombre: "Waffles con fruta",
+        precio: 40,
+        palabras: [
+            "waffles",
+            "wafles",
+            "waffle"
+        ]
+    }
+
+];
+
+
+/* ==========================================
+   PEDIDO ACTUAL
+========================================== */
+
+let pedidoActual = {
+
+    nombre: "",
+    grupo: "",
+
+    productos: [],
+
+    total: 0
+
+};
+
+
+/* ==========================================
+   ABRIR DÍA
+========================================== */
+
+function abrirDia(dia) {
+
+    document.getElementById("inicio").style.display = "none";
+
+    const menus =
+        document.querySelectorAll(".menu-dia");
+
+    menus.forEach(function(menu) {
+
+        menu.style.display = "none";
+
+    });
+
+    const menuSeleccionado =
+        document.getElementById(dia);
+
+    if (menuSeleccionado) {
+
+        menuSeleccionado.style.display = "block";
+
+    }
+
+    window.scrollTo({
+
+        top: 0,
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* ==========================================
+   REGRESAR AL INICIO
+========================================== */
+
+function regresarInicio() {
+
+    const menus =
+        document.querySelectorAll(".menu-dia");
+
+    menus.forEach(function(menu) {
+
+        menu.style.display = "none";
+
+    });
+
+    document.getElementById("inicio").style.display =
+        "block";
+
+    window.scrollTo({
+
+        top: 0,
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* ==========================================
+   ABRIR PEDIDO DESDE UN BOTÓN
+========================================== */
+
+function abrirPedido(producto, precio) {
+
+    pedidoActual.productos = [
+
+        {
+            nombre: producto,
+            precio: precio,
+            cantidad: 1
+        }
+
+    ];
+
+    actualizarFormularioPedido();
+
+    document.getElementById("ventanaPedido").style.display =
+        "flex";
+
+}
+
+
+/* ==========================================
+   ACTUALIZAR RESUMEN
+========================================== */
+
+function actualizarFormularioPedido() {
+
+    const lista =
+        document.getElementById("listaPedido");
+
+    const totalElemento =
+        document.getElementById("totalPedido");
+
+    if (!pedidoActual.productos.length) {
+
+        lista.innerHTML =
+            "No hay productos agregados.";
+
+        totalElemento.textContent =
+            "$0.00";
+
+        return;
+
+    }
+
+
+    let html = "";
+    let total = 0;
+
+
+    pedidoActual.productos.forEach(function(producto) {
+
+        const subtotal =
+            producto.precio * producto.cantidad;
+
+        total += subtotal;
+
+
+        html += `
+
+            <div class="item-pedido">
+
+                <span>
+                    ${producto.cantidad} x
+                    ${producto.nombre}
+                </span>
+
+                <strong>
+                    $${subtotal.toFixed(2)}
+                </strong>
+
+            </div>
+
+        `;
+
+    });
+
+
+    pedidoActual.total = total;
+
+    lista.innerHTML = html;
+
+    totalElemento.textContent =
+        "$" + total.toFixed(2);
+
+}
+
+
+/* ==========================================
+   CERRAR PEDIDO
+========================================== */
+
+function cerrarPedido() {
+
+    document.getElementById("ventanaPedido").style.display =
+        "none";
+
+}
+
+
+/* ==========================================
+   CONFIRMAR PEDIDO
+========================================== */
+
+function confirmarPedido(event) {
+
+    event.preventDefault();
+
+
+    if (!pedidoActual.productos.length) {
+
+        alert("Agrega al menos un producto.");
+
+        return;
+
+    }
+
+
+    pedidoActual.nombre =
+        document.getElementById("nombre").value.trim();
+
+    pedidoActual.grupo =
+        document.getElementById("grupo").value.trim();
+
+
+    actualizarFormularioPedido();
+
+
+    document.getElementById("ventanaPedido").style.display =
+        "none";
+
+
+    mostrarResumenPago();
+
+
+    document.getElementById("ventanaPago").style.display =
+        "flex";
+
+}
+
+
+/* ==========================================
+   MOSTRAR RESUMEN EN PAGO
+========================================== */
+
+function mostrarResumenPago() {
+
+    const resumen =
+        document.getElementById("resumenPago");
+
+    const total =
+        document.getElementById("totalPago");
+
+    let html = "";
+
+
+    pedidoActual.productos.forEach(function(producto) {
+
+        const subtotal =
+            producto.precio * producto.cantidad;
+
+
+        html += `
+
+            <div class="item-pedido">
+
+                <span>
+                    ${producto.cantidad} x
+                    ${producto.nombre}
+                </span>
+
+                <strong>
+                    $${subtotal.toFixed(2)}
+                </strong>
+
+            </div>
+
+        `;
+
+    });
+
+
+    resumen.innerHTML = html;
+
+    total.textContent =
+        "$" + pedidoActual.total.toFixed(2);
+
+}
+
+
+/* ==========================================
+   CERRAR FORMAS DE PAGO
+========================================== */
+
+function cerrarPago() {
+
+    document.getElementById("ventanaPago").style.display =
+        "none";
+
+}
+
+
+/* ==========================================
+   MOSTRAR TRANSFERENCIA
+========================================== */
+
+function mostrarTransferencia() {
+
+    cerrarPago();
+
+
+    document.getElementById("montoTransferencia").textContent =
+        "$" + pedidoActual.total.toFixed(2);
+
+
+    document.getElementById("ventanaTransferencia").style.display =
+        "flex";
+
+}
+
+
+/* ==========================================
+   CERRAR TRANSFERENCIA
+========================================== */
+
+function cerrarTransferencia() {
+
+    document.getElementById("ventanaTransferencia").style.display =
+        "none";
+
+}
+
+
+/* ==========================================
+   CONFIRMAR TRANSFERENCIA
+========================================== */
+
+function confirmarTransferencia() {
+
+    const comprobante =
+        document.getElementById("comprobante");
+
+
+    if (comprobante.files.length === 0) {
+
+        alert(
+            "Por favor selecciona tu comprobante de transferencia."
+        );
+
+        return;
+
+    }
+
+
+    const archivo =
+        comprobante.files[0];
+
+
+    cerrarTransferencia();
+
+
+    mostrarPedidoRealizado(
+        "Transferencia bancaria",
+        "📎 Comprobante: <b>" +
+        escaparHTML(archivo.name) +
+        "</b>"
+    );
+
+}
+
+
+/* ==========================================
+   MOSTRAR EFECTIVO
+========================================== */
+
+function mostrarEfectivo() {
+
+    cerrarPago();
+
+
+    document.getElementById("pedidoEfectivo").innerHTML =
+        generarTextoPedido();
+
+
+    document.getElementById("totalEfectivo").textContent =
+        "$" + pedidoActual.total.toFixed(2);
+
+
+    document.getElementById("ventanaEfectivo").style.display =
+        "flex";
+
+}
+
+
+/* ==========================================
+   CERRAR EFECTIVO
+========================================== */
+
+function cerrarEfectivo() {
+
+    document.getElementById("ventanaEfectivo").style.display =
+        "none";
+
+}
+
+
+/* ==========================================
+   CONFIRMAR EFECTIVO
+========================================== */
+
+function confirmarEfectivo() {
+
+    cerrarEfectivo();
+
+
+    mostrarPedidoRealizado(
+        "Efectivo",
+        "📍 Recuerda realizar el pago directamente en la cafetería."
+    );
+
+}
+
+
+/* ==========================================
+   GENERAR TEXTO DEL PEDIDO
+========================================== */
+
+function generarTextoPedido() {
+
+    return pedidoActual.productos
+        .map(function(producto) {
+
+            return producto.cantidad +
+                " x " +
+                escaparHTML(producto.nombre);
+
+        })
+        .join("<br>");
+
+}
+
+
+/* ==========================================
+   MOSTRAR PEDIDO REALIZADO
+========================================== */
+
+function mostrarPedidoRealizado(
+    formaPago,
+    informacionExtra
+) {
+
+    document.getElementById("pedidoRealizado").style.display =
+        "flex";
+
+
+    document.getElementById("mensajePedido").innerHTML =
+
+        "👤 Estudiante: <b>" +
+        escaparHTML(pedidoActual.nombre) +
+        "</b><br><br>" +
+
+        "🎓 Grupo: <b>" +
+        escaparHTML(pedidoActual.grupo) +
+        "</b><br><br>" +
+
+        "🍽️ <b>Pedido:</b><br><br>" +
+
+        generarTextoPedido() +
+
+        "<br><br>" +
+
+        "💰 Total: <b>$" +
+        pedidoActual.total.toFixed(2) +
+        "</b><br><br>" +
+
+        "💳 Forma de pago: <b>" +
+        formaPago +
+        "</b><br><br>" +
+
+        informacionExtra +
+
+        "<br><br>" +
+
+        "✅ Tu pedido ha sido registrado correctamente.";
+
+}
+
+
+/* ==========================================
+   CERRAR Y REGRESAR
+========================================== */
+
+function cerrarPedidoYRegresar() {
+
+    document.getElementById("pedidoRealizado").style.display =
+        "none";
+
+
+    document.getElementById("ventanaPago").style.display =
+        "none";
+
+
+    document.getElementById("ventanaPedido").style.display =
+        "none";
+
+
+    document.getElementById("ventanaTransferencia").style.display =
+        "none";
+
+
+    document.getElementById("ventanaEfectivo").style.display =
+        "none";
+
+
+    document.getElementById("nombre").value = "";
+
+    document.getElementById("grupo").value = "";
+
+    document.getElementById("comprobante").value = "";
+
+
+    pedidoActual = {
+
+        nombre: "",
+        grupo: "",
+        productos: [],
+        total: 0
+
+    };
+
+
+    regresarInicio();
+
+}
+
+
+/* ==========================================
+   OBTENER NÚMERO DE TEXTO
+========================================== */
+
+function obtenerNumero(texto) {
+
+    const numeros = {
+
+        "cero": 0,
+        "uno": 1,
+        "una": 1,
+        "dos": 2,
+        "tres": 3,
+        "cuatro": 4,
+        "cinco": 5,
+        "seis": 6,
+        "siete": 7,
+        "ocho": 8,
+        "nueve": 9,
+        "diez": 10
+
+    };
+
+
+    const numeroEscrito =
+        texto.match(
+            /\b(cero|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\b/
+        );
+
+
+    if (numeroEscrito) {
+
+        return numeros[numeroEscrito[1]];
+
+    }
+
+
+    const numero =
+        texto.match(/\b([1-9]|10)\b/);
+
+
+    if (numero) {
+
+        return parseInt(numero[1]);
+
+    }
+
+
+    return 1;
+
+}
+
+
+/* ==========================================
+   OBTENER CANTIDAD DE UN PRODUCTO
+========================================== */
+
+function obtenerCantidadProducto(texto, producto) {
+
+    let posicion = -1;
+
+
+    for (const palabra of producto.palabras) {
+
+        const p =
+            texto.indexOf(palabra);
+
+        if (p !== -1) {
+
+            posicion = p;
+
+            break;
+
+        }
+
+    }
+
+
+    if (posicion === -1) {
+
+        return 1;
+
+    }
+
+
+    const antes =
+        texto.substring(
+            Math.max(0, posicion - 25),
+            posicion
+        );
+
+
+    return obtenerNumero(antes);
+
+}
+
+
+/* ==========================================
+   DETECTAR PRODUCTOS
+========================================== */
+
+function detectarProductos(texto) {
+
+    const encontrados = [];
+
+
+    productosDisponibles.forEach(function(producto) {
+
+        let encontrado = false;
+
+
+        for (const palabra of producto.palabras) {
+
+            if (texto.includes(palabra)) {
+
+                encontrado = true;
+
+                break;
+
+            }
+
+        }
+
+
+        if (encontrado) {
+
+            const cantidad =
+                obtenerCantidadProducto(
+                    texto,
+                    producto
+                );
+
+
+            encontrados.push({
+
+                nombre: producto.nombre,
+
+                precio: producto.precio,
+
+                cantidad: cantidad
+
+            });
+
+        }
+
+    });
+
+
+    return encontrados;
+
+}
+
+
+/* ==========================================
+   CREAR PEDIDO MÚLTIPLE
+========================================== */
+
+function crearPedidoMultiple(productos) {
+
+    pedidoActual.productos =
+        productos;
+
+
+    actualizarFormularioPedido();
+
+
+    document.getElementById("ventanaPedido").style.display =
+        "flex";
+
+
+    hablar(
+
+        "Encontré " +
+        productos.length +
+        " productos en tu pedido. Revisa el resumen y escribe tu nombre y grupo."
+
+    );
+
+}
+
+
+/* ==========================================
+   🎙️ ASISTENTE DE VOZ
+========================================== */
+
+function iniciarAsistente() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+        hablar(
+            "Lo siento. Tu navegador no es compatible con el reconocimiento de voz."
+        );
+
+        return;
+
+    }
+
+
+    const reconocimiento =
+        new SpeechRecognition();
+
+
+    reconocimiento.lang =
+        "es-MX";
+
+    reconocimiento.continuous =
+        false;
+
+    reconocimiento.interimResults =
+        false;
+
+
+    document.getElementById("estadoVoz").innerText =
+        "🎙️ Escuchando...";
+
+
+    try {
+
+        reconocimiento.start();
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+
+    reconocimiento.onresult =
+        function(event) {
+
+            let texto =
+
+                event.results[0][0].transcript
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(
+                        /[\u0300-\u036f]/g,
+                        ""
+                    );
+
+
+            document.getElementById("estadoVoz").innerText =
+
+                "🗣️ Dijiste: " +
+                texto;
+
+
+            procesarComando(texto);
+
+        };
+
+
+    reconocimiento.onerror =
+        function() {
+
+            document.getElementById("estadoVoz").innerText =
+                "❌ No pude entenderte.";
+
+
+            hablar(
+                "No pude escucharte. Intenta nuevamente."
+            );
+
+        };
+
+}
+
+
+/* ==========================================
+   🧠 PROCESAR COMANDOS
+========================================== */
+
+function procesarComando(texto) {
+
+
+    /* ======================================
+       SALUDO
+    ====================================== */
+
+    if (
+
+        texto.includes("hola") ||
+        texto.includes("buenos dias") ||
+        texto.includes("buenas tardes") ||
+        texto.includes("buenas noches")
+
+    ) {
+
+        hablar(
+
+            "Hola. Soy el asistente de la cafetería CECyTEM. ¿En qué puedo ayudarte?"
+
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       AYUDA
+    ====================================== */
+
+    if (
+
+        texto.includes("ayuda") ||
+        texto.includes("comandos") ||
+        texto.includes("que puedes hacer")
+
+    ) {
+
+        hablar(
+
+            "Puedo mostrarte el menú de cualquier día, decirte precios y ayudarte a pedir varios productos al mismo tiempo."
+
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       PEDIDO MÚLTIPLE
+    ====================================== */
+
+    const productosDetectados =
+        detectarProductos(texto);
+
+
+    const esPedido =
+
+        texto.includes("quiero") ||
+        texto.includes("quiero pedir") ||
+        texto.includes("dame") ||
+        texto.includes("me das") ||
+        texto.includes("voy a pedir") ||
+        texto.includes("ordenar") ||
+        texto.includes("pedido") ||
+        texto.includes("pedir");
+
+
+    if (
+        productosDetectados.length > 1 &&
+        esPedido
+    ) {
+
+        crearPedidoMultiple(
+            productosDetectados
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       PEDIDO DE UN SOLO PRODUCTO CON CANTIDAD
+    ====================================== */
+
+    if (
+        productosDetectados.length === 1 &&
+        esPedido
+    ) {
+
+        crearPedidoMultiple(
+            productosDetectados
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       MENÚ LUNES
+    ====================================== */
+
+    if (texto.includes("lunes")) {
+
+        abrirDia("lunes");
+
+        hablar(
+
+            "El lunes tenemos tacos dorados de pollo por 35 pesos, torta de jamón y queso por 40 pesos y yogur con fruta por 30 pesos."
+
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       MENÚ MARTES
+    ====================================== */
+
+    if (texto.includes("martes")) {
+
+        abrirDia("martes");
+
+        hablar(
+
+            "El martes tenemos hamburguesa por 50 pesos, burrito de pollo por 40 pesos y hot cakes con fruta por 35 pesos."
+
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       MENÚ MIÉRCOLES
+    ====================================== */
+
+    if (texto.includes("miercoles")) {
+
+        abrirDia("miercoles");
+
+        hablar(
+
+            "El miércoles tenemos quesadillas por 30 pesos, hot dog con papas por 35 pesos y licuado de plátano por 30 pesos."
+
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       MENÚ JUEVES
+    ====================================== */
+
+    if (texto.includes("jueves")) {
+
+        abrirDia("jueves");
+
+        hablar(
+
+            "El jueves tenemos torta de milanesa por 45 pesos, tacos de bistec por 45 pesos y ensalada de frutas por 30 pesos."
+
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       MENÚ VIERNES
+    ====================================== */
+
+    if (texto.includes("viernes")) {
+
+        abrirDia("viernes");
+
+        hablar(
+
+            "El viernes tenemos pizza individual por 45 pesos, club sándwich por 45 pesos y waffles con fruta por 40 pesos."
+
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       CONSULTA DE PRECIO
+    ====================================== */
+
+    if (
+
+        texto.includes("precio") ||
+        texto.includes("cuesta") ||
+        texto.includes("cuestan") ||
+        texto.includes("vale") ||
+        texto.includes("cuanto")
+
+    ) {
+
+        if (productosDetectados.length > 0) {
+
+            const producto =
+                productosDetectados[0];
+
+
+            hablar(
+
+                producto.nombre +
+                " cuesta " +
+                producto.precio +
+                " pesos."
+
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    /* ======================================
+       PRODUCTO INDIVIDUAL
+       SIN PALABRA "QUIERO"
+    ====================================== */
+
+    if (
+        productosDetectados.length === 1
+    ) {
+
+        const producto =
+            productosDetectados[0];
+
+
+        abrirPedido(
+            producto.nombre,
+            producto.precio
+        );
+
+
+        hablar(
+
+            producto.nombre +
+            " cuesta " +
+            producto.precio +
+            " pesos. Abrí el formulario de pedido."
+
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       DESPEDIDA
+    ====================================== */
+
+    if (
+
+        texto.includes("gracias") ||
+        texto.includes("adios") ||
+        texto.includes("adios")
+
+    ) {
+
+        hablar(
+
+            "Con gusto. Espero que disfrutes tu comida."
+
+        );
+
+        return;
+
+    }
+
+
+    /* ======================================
+       NO ENTENDIDO
+    ====================================== */
+
+    hablar(
+
+        "No entendí el comando. Puedes decir, por ejemplo: quiero dos hamburguesas y un burrito."
+
+    );
+
+}
+
+
+/* ==========================================
+   🔊 VOZ DEL ASISTENTE
+========================================== */
+
+function hablar(mensaje) {
+
+    if (!("speechSynthesis" in window)) {
+
+        return;
+
+    }
+
+
+    speechSynthesis.cancel();
+
+
+    const voz =
+        new SpeechSynthesisUtterance(mensaje);
+
+
+    voz.lang =
+        "es-MX";
+
+    voz.rate =
+        1;
+
+    voz.pitch =
+        1;
+
+    voz.volume =
+        1;
+
+
+    speechSynthesis.speak(voz);
+
+}
+
+
+/* ==========================================
+   SEGURIDAD PARA TEXTO MOSTRADO EN HTML
+========================================== */
+
+function escaparHTML(texto) {
+
+    return String(texto)
+
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+</script>
+      
+<script>
+
+/* ==========================================
+   REGISTRAR PWA
+========================================== */
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", function() {
+
+        navigator.serviceWorker
+            .register("./service-worker.js")
+            .then(function(registro) {
+
+                console.log(
+                    "✅ Service Worker registrado correctamente:",
+                    registro.scope
+                );
+
+            })
+            .catch(function(error) {
+
+                console.error(
+                    "❌ Error al registrar Service Worker:",
+                    error
+                );
+
+            });
+
+    });
+
+}
+
+</script>
+
+
+
+
+</body>
+
+</html>
+
