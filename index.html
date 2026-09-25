@@ -104,12 +104,12 @@
             o hacer un pedido con varios productos.
         </p>
 
-        <button class="btn-voz"
-                onclick="iniciarAsistente()">
+       <button class="btn-voz" 
+        onclick="activarVozYAsistente()">
 
-            🎙️ Hablar con el asistente
+    🎙️ Hablar con el asistente
 
-        </button>
+</button>
 
         <p id="estadoVoz">
             Presiona el botón y dime qué necesitas.
@@ -1817,6 +1817,27 @@ function crearPedidoMultiple(productos) {
 /* ==========================================
    🎙️ ASISTENTE DE VOZ
 ========================================== */
+
+  function activarVozYAsistente() {
+
+    if ("speechSynthesis" in window) {
+
+        speechSynthesis.cancel();
+
+        const mensaje = new SpeechSynthesisUtterance("Te escucho.");
+
+        mensaje.lang = "es-MX";
+        mensaje.rate = 1;
+        mensaje.pitch = 1;
+        mensaje.volume = 1;
+
+        speechSynthesis.speak(mensaje);
+    }
+
+    setTimeout(function() {
+        iniciarAsistente();
+    }, 300);
+}
 
 function iniciarAsistente() {
 
