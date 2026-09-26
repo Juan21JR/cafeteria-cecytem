@@ -1432,12 +1432,11 @@ function cerrarTransferencia() {
 
 }
 
-
 /* ==========================================
    CONFIRMAR TRANSFERENCIA
 ========================================== */
 
-function confirmarTransferencia() {
+async function confirmarTransferencia() {
 
     const comprobante =
         document.getElementById("comprobante");
@@ -1458,18 +1457,50 @@ function confirmarTransferencia() {
         comprobante.files[0];
 
 
-    cerrarTransferencia();
+    try {
+
+        await window.guardarPedidoEnFirestore({
+
+            nombre: pedidoActual.nombre,
+
+            grupo: pedidoActual.grupo,
+
+            productos: pedidoActual.productos,
+
+            total: pedidoActual.total,
+
+            metodoPago: "Transferencia bancaria",
+
+            comprobante: archivo.name
+
+        });
 
 
-    mostrarPedidoRealizado(
-        "Transferencia bancaria",
-        "📎 Comprobante: <b>" +
-        escaparHTML(archivo.name) +
-        "</b>"
-    );
+        cerrarTransferencia();
+
+
+        mostrarPedidoRealizado(
+            "Transferencia bancaria",
+            "📎 Comprobante: <b>" +
+            escaparHTML(archivo.name) +
+            "</b>"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error al guardar pedido:",
+            error
+        );
+
+        alert(
+            "❌ No se pudo registrar el pedido. Inténtalo nuevamente."
+        );
+
+    }
 
 }
-
 
 /* ==========================================
    MOSTRAR EFECTIVO
@@ -1510,15 +1541,48 @@ function cerrarEfectivo() {
    CONFIRMAR EFECTIVO
 ========================================== */
 
-function confirmarEfectivo() {
+async function confirmarEfectivo() {
 
-    cerrarEfectivo();
+    try {
+
+        await window.guardarPedidoEnFirestore({
+
+            nombre: pedidoActual.nombre,
+
+            grupo: pedidoActual.grupo,
+
+            productos: pedidoActual.productos,
+
+            total: pedidoActual.total,
+
+            metodoPago: "Efectivo",
+
+            comprobante: ""
+
+        });
 
 
-    mostrarPedidoRealizado(
-        "Efectivo",
-        "📍 Recuerda realizar el pago directamente en la cafetería."
-    );
+        cerrarEfectivo();
+
+
+        mostrarPedidoRealizado(
+            "Efectivo",
+            "📍 Recuerda realizar el pago directamente en la cafetería."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error al guardar pedido:",
+            error
+        );
+
+        alert(
+            "❌ No se pudo registrar el pedido. Inténtalo nuevamente."
+        );
+
+    }
 
 }
 
@@ -2306,6 +2370,13 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
+    import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
 
 // ==========================================
 // CONFIGURACIÓN DE FIREBASE
@@ -2343,6 +2414,25 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.guardarPedidoEnFirestore = async function(datosPedido) {
+
+    return await addDoc(
+        collection(db, "pedidos"),
+        {
+            nombre: datosPedido.nombre,
+            grupo: datosPedido.grupo,
+            productos: datosPedido.productos,
+            total: datosPedido.total,
+            metodoPago: datosPedido.metodoPago,
+            comprobante: datosPedido.comprobante || "",
+            estado: "pendiente",
+            fecha: serverTimestamp()
+        }
+    );
+
+};
 
 
 // ==========================================
