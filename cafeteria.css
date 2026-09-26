@@ -1381,3 +1381,28 @@ footer {
 
     box-shadow: 0 5px 12px rgba(0,0,0,0.20);
 }
+
+
+.acceso-encargada-contenedor {
+    text-align: center;
+    padding: 15px;
+}
+
+.btn-encargada {
+    display: inline-block !important;
+    background: #f2c300;
+    color: #006b3c;
+    border: 2px solid #006b3c;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.btn-encargada:hover {
+    transform: scale(1.05);
+    background: white;
+}
