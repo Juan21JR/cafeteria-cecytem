@@ -1,8 +1,9 @@
-const CACHE_NAME = "cafeteria-cecytem-v2";
+const CACHE_NAME = "cafeteria-cecytem-v3";
 
 const ARCHIVOS = [
     "./",
     "./index.html",
+    "./encargada.html",
     "./cafeteria.css",
     "./manifest.json",
 
