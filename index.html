@@ -2371,11 +2371,12 @@ function escaparHTML(texto) {
 
 import { initializeApp }
     from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
 import {
     getAuth,
     signInWithEmailAndPassword,
-    signOut
+    signOut,
+    setPersistence,
+    browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
     import {
@@ -2422,6 +2423,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence);
     const db = getFirestore(app);
 
     window.guardarPedidoEnFirestore = async function(datosPedido) {
