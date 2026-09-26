@@ -498,6 +498,7 @@
                 );
 
                 const resultado = await getDocs(consulta);
+                console.log("PEDIDOS ENCONTRADOS:", resultado.size);
 
                 document.getElementById("totalPedidos").textContent =
                     resultado.size;
