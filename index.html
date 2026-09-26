@@ -50,6 +50,12 @@
             <span>
                 🏫 Menú escolar • 🍔 Comida • 🎙️ Asistente de voz
             </span>
+             <button 
+    class="btn-encargada" 
+    onclick="abrirAccesoEncargada()"
+    style="display:block !important; visibility:visible !important; opacity:1 !important; background:red !important; color:white !important; position:relative !important; z-index:99999 !important; margin:20px auto !important;">
+    👩‍💼 ACCESO DE ENCARGADA
+</button>
 
         </div>
 
@@ -2288,7 +2294,186 @@ function escaparHTML(texto) {
 }
 
 </script>
-      
+      <!-- ==========================================
+     FIREBASE - AUTENTICACIÓN ENCARGADA
+========================================== -->
+
+<script type="module">
+
+import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+// ==========================================
+// CONFIGURACIÓN DE FIREBASE
+// ==========================================
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyBLx0K7VlFsgJ_Hb_xeDTOFAmS_Kgwxnos",
+
+    authDomain:
+        "cafeteria-cecytem.firebaseapp.com",
+
+    projectId:
+        "cafeteria-cecytem",
+
+    storageBucket:
+        "cafeteria-cecytem.firebasestorage.app",
+
+    messagingSenderId:
+        "756924498889",
+
+    appId:
+        "1:756924498889:web:b370685487cfe397eb9e18",
+
+    measurementId:
+        "G-QM14B3YP62"
+
+};
+
+
+// ==========================================
+// INICIALIZAR FIREBASE
+// ==========================================
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+
+// ==========================================
+// ABRIR LOGIN
+// ==========================================
+
+window.abrirAccesoEncargada = function() {
+
+    document.getElementById(
+        "modalEncargada"
+    ).style.display = "flex";
+
+};
+
+
+// ==========================================
+// CERRAR LOGIN
+// ==========================================
+
+window.cerrarAccesoEncargada = function() {
+
+    document.getElementById(
+        "modalEncargada"
+    ).style.display = "none";
+
+};
+
+
+// ==========================================
+// INICIAR SESIÓN
+// ==========================================
+
+window.iniciarSesionEncargada = async function() {
+
+    const correo =
+        document.getElementById(
+            "correoEncargada"
+        ).value.trim();
+
+    const password =
+        document.getElementById(
+            "passwordEncargada"
+        ).value;
+
+    const mensaje =
+        document.getElementById(
+            "mensajeLoginEncargada"
+        );
+
+
+    if (!correo || !password) {
+
+        mensaje.textContent =
+            "⚠️ Escribe tu correo y contraseña.";
+
+        return;
+
+    }
+
+
+    mensaje.textContent =
+        "🔄 Iniciando sesión...";
+
+
+    try {
+
+        const usuario =
+            await signInWithEmailAndPassword(
+                auth,
+                correo,
+                password
+            );
+
+
+        console.log(
+            "Encargada autenticada:",
+            usuario.user.email
+        );
+
+
+        mensaje.textContent =
+            "✅ Inicio de sesión correcto.";
+
+        setTimeout(function() {
+
+            window.location.href =
+                "encargada.html";
+
+        }, 800);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        mensaje.textContent =
+            "❌ Correo o contraseña incorrectos.";
+
+    }
+
+};
+
+
+// ==========================================
+// CERRAR SESIÓN
+// ==========================================
+
+window.cerrarSesionEncargada = async function() {
+
+    try {
+
+        await signOut(auth);
+
+        window.location.href =
+            "index.html";
+
+    } catch (error) {
+
+        console.error(
+            "Error al cerrar sesión:",
+            error
+        );
+
+    }
+
+};
+
+</script>
 <script>
 
 /* ==========================================
@@ -2324,7 +2509,61 @@ if ("serviceWorker" in navigator) {
 
 </script>
 
+<!-- ==========================================
+     ACCESO DE ENCARGADA
+========================================== -->
 
+<div id="modalEncargada" class="modal-encargada">
+
+    <div class="login-encargada">
+
+        <button class="cerrar-login"
+                onclick="cerrarAccesoEncargada()">
+            ✕
+        </button>
+
+        <h2>👩‍💼 Acceso de encargada</h2>
+
+        <p>
+            Ingresa con la cuenta autorizada
+            de la cafetería.
+        </p>
+
+        <label for="correoEncargada">
+            Correo electrónico
+        </label>
+
+        <input
+            type="email"
+            id="correoEncargada"
+            placeholder="Correo de la encargada"
+            autocomplete="username"
+        >
+
+        <label for="passwordEncargada">
+            Contraseña
+        </label>
+
+        <input
+            type="password"
+            id="passwordEncargada"
+            placeholder="Contraseña"
+            autocomplete="current-password"
+        >
+
+        <button
+            class="btn-login-encargada"
+            onclick="iniciarSesionEncargada()">
+            🔐 Iniciar sesión
+        </button>
+
+        <p id="mensajeLoginEncargada"
+           class="mensaje-login">
+        </p>
+
+    </div>
+
+</div>
 
 
 </body>
