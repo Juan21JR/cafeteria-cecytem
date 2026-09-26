@@ -459,28 +459,26 @@
         /* ==========================================
            COMPROBAR SESIÓN
         ========================================== */
+onAuthStateChanged(auth, (usuario) => {
 
-        onAuthStateChanged(auth, (usuario) => {
+    if (!usuario) {
 
-            if (!usuario) {
+        window.location.href = "index.html";
 
-                window.location.href = "index.html";
+        return;
+    }
 
-                return;
-            }
+    console.log("Encargada conectada:", usuario.email);
 
-            console.log("Encargada conectada:", usuario.email);
+    cargarPedidos();
 
-            window.cargarPedidos();
-
-        });
-
+});
 
         /* ==========================================
            CARGAR PEDIDOS
         ========================================== */
 
-        window.cargarPedidos = async function() {
+       async function cargarPedidos() {
 
             const lista = document.getElementById("listaPedidos");
 
