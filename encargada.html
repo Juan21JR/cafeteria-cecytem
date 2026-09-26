@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Panel de Encargada | Cafetería CECyTEM</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f5f3;
+            color: #222;
+        }
+
+        /* ================================
+           ENCABEZADO
+        ================================= */
+
+        header {
+            background: #006b3f;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .titulo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .titulo img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .titulo h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .titulo p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+        }
+
+        .btn-salir {
+            background: white;
+            color: #006b3f;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-salir:hover {
+            transform: scale(1.03);
+        }
+
+        /* ================================
+           CONTENEDOR
+        ================================= */
+
+        .contenedor {
+            width: 95%;
+            max-width: 1200px;
+            margin: 25px auto;
+        }
+
+        .barra-superior {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .barra-superior h2 {
+            margin: 0;
+        }
+
+        .btn-actualizar {
+            background: #006b3f;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* ================================
+           ESTADÍSTICAS
+        ================================= */
+
+        .estadisticas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .estadistica {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .estadistica h3 {
+            margin: 0 0 8px;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .estadistica strong {
+            font-size: 28px;
+            color: #006b3f;
+        }
+
+        /* ================================
+           PEDIDOS
+        ================================= */
+
+        #listaPedidos {
+            display: grid;
+            gap: 20px;
+        }
+
+        .pedido {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 6px solid #006b3f;
+        }
+
+        .pedido-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .pedido-cabecera h3 {
+            margin: 0;
+            color: #006b3f;
+        }
+
+        .fecha {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .datos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .dato {
+            background: #f6f8f7;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .dato strong {
+            display: block;
+            color: #555;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .productos {
+            margin: 15px 0;
+        }
+
+        .productos h4 {
+            margin-bottom: 10px;
+        }
+
+        .producto {
+            display: flex;
+            justify-content: space-between;
+            padding: 9px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .total {
+            font-size: 21px;
+            font-weight: bold;
+            color: #006b3f;
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        /* ================================
+           PAGO
+        ================================= */
+
+        .pago {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #eef7f1;
+        }
+
+        .comprobante {
+            margin-top: 10px;
+        }
+
+        .comprobante a {
+            color: #006b3f;
+            font-weight: bold;
+        }
+
+        /* ================================
+           ESTADO
+        ================================= */
+
+        .acciones {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .acciones label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .estado {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            background: white;
+        }
+
+        /* ================================
+           SIN PEDIDOS
+        ================================= */
+
+        .sin-pedidos {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 18px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .sin-pedidos .emoji {
+            font-size: 50px;
+        }
+
+        /* ================================
+           CARGANDO
+        ================================= */
+
+        #cargando {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 700px) {
+
+            .estadisticas {
+                grid-template-columns: 1fr;
+            }
+
+            .datos {
+                grid-template-columns: 1fr;
+            }
+
+            .titulo h1 {
+                font-size: 20px;
+            }
+
+            header {
+                align-items: flex-start;
+            }
+
+            .pedido {
+                padding: 16px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- ==========================================
+         ENCABEZADO
+    ========================================== -->
+
+    <header>
+
+        <div class="titulo">
+
+            <img src="imagenes/cecylogo.jpg" alt="Logo CECyTEM">
+
+            <div>
+                <h1>👩‍💼 Panel de Encargada</h1>
+                <p>Cafetería CECyTEM</p>
+            </div>
+
+        </div>
+
+        <button class="btn-salir" onclick="cerrarSesion()">
+            🚪 Cerrar sesión
+        </button>
+
+    </header>
+
+
+    <!-- ==========================================
+         CONTENIDO
+    ========================================== -->
+
+    <main class="contenedor">
+
+        <div class="barra-superior">
+
+            <div>
+                <h2>📋 Pedidos recibidos</h2>
+                <p>Administra los pedidos de los estudiantes.</p>
+            </div>
+
+            <button class="btn-actualizar" onclick="cargarPedidos()">
+                🔄 Actualizar pedidos
+            </button>
+
+        </div>
+
+
+        <!-- ==========================================
+             ESTADÍSTICAS
+        ========================================== -->
+
+        <section class="estadisticas">
+
+            <div class="estadistica">
+                <h3>📦 Pedidos</h3>
+                <strong id="totalPedidos">0</strong>
+            </div>
+
+            <div class="estadistica">
+                <h3>⏳ Pendientes</h3>
+                <strong id="pedidosPendientes">0</strong>
+            </div>
+
+            <div class="estadistica">
+                <h3>💰 Ventas</h3>
+                <strong id="ventasTotales">$0</strong>
+            </div>
+
+        </section>
+
+
+        <!-- ==========================================
+             CARGANDO
+        ========================================== -->
+
+        <div id="cargando">
+            🔄 Cargando pedidos...
+        </div>
+
+
+        <!-- ==========================================
+             LISTA DE PEDIDOS
+        ========================================== -->
+
+        <section id="listaPedidos"></section>
+
+    </main>
+
+
+    <!-- ==========================================
+         FIREBASE
+    ========================================== -->
+
+    <script type="module">
+
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+        import {
+            getFirestore,
+            collection,
+            getDocs,
+            query,
+            orderBy
+        } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+        /* ==========================================
+           CONFIGURACIÓN FIREBASE
+        ========================================== */
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLx0K7VlFsgJ_Hb_xeDTOFAmS_kGwxnos",
+            authDomain: "cafeteria-cecytem.firebaseapp.com",
+            projectId: "cafeteria-cecytem",
+            storageBucket: "cafeteria-cecytem.firebasestorage.app",
+            messagingSenderId: "756924498889",
+            appId: "1:756924498889:web:b370685487cfe397eb9e18",
+            measurementId: "G-QM14B3YP62"
+        };
+
+
+        /* ==========================================
+           INICIALIZAR FIREBASE
+        ========================================== */
+
+        const app = initializeApp(firebaseConfig);
+
+        const auth = getAuth(app);
+
+        const db = getFirestore(app);
+
+
+        /* ==========================================
+           COMPROBAR SESIÓN
+        ========================================== */
+
+        onAuthStateChanged(auth, (usuario) => {
+
+            if (!usuario) {
+
+                window.location.href = "index.html";
+
+                return;
+            }
+
+            console.log("Encargada conectada:", usuario.email);
+
+            cargarPedidos();
+
+        });
+
+
+        /* ==========================================
+           CARGAR PEDIDOS
+        ========================================== */
+
+        window.cargarPedidos = async function() {
+
+            const lista = document.getElementById("listaPedidos");
+
+            const cargando = document.getElementById("cargando");
+
+            cargando.style.display = "block";
+
+            lista.innerHTML = "";
+
+            try {
+
+                const consulta = query(
+                    collection(db, "pedidos"),
+                    orderBy("fecha", "desc")
+                );
+
+                const resultado = await getDocs(consulta);
+
+                document.getElementById("totalPedidos").textContent =
+                    resultado.size;
+
+                let pendientes = 0;
+
+                let ventas = 0;
+
+                if (resultado.empty) {
+
+                    lista.innerHTML = `
+                        <div class="sin-pedidos">
+                            <div class="emoji">📭</div>
+                            <h2>No hay pedidos todavía</h2>
+                            <p>
+                                Cuando un estudiante haga un pedido,
+                                aparecerá aquí.
+                            </p>
+                        </div>
+                    `;
+
+                    document.getElementById("pedidosPendientes").textContent = "0";
+
+                    document.getElementById("ventasTotales").textContent = "$0";
+
+                    cargando.style.display = "none";
+
+                    return;
+                }
+
+
+                resultado.forEach((documento) => {
+
+                    const pedido = documento.data();
+
+                    const idPedido = documento.id;
+
+
+                    /* ================================
+                       ESTADO
+                    ================================= */
+
+                    const estado = pedido.estado || "Pendiente";
+
+
+                    if (
+                        estado.toLowerCase() === "pendiente"
+                    ) {
+
+                        pendientes++;
+
+                    }
+
+
+                    /* ================================
+                       TOTAL
+                    ================================= */
+
+                    const total = Number(pedido.total) || 0;
+
+                    ventas += total;
+
+
+                    /* ================================
+                       FECHA
+                    ================================= */
+
+                    let fechaTexto = "Sin fecha";
+
+                    if (pedido.fecha && pedido.fecha.toDate) {
+
+                        fechaTexto =
+                            pedido.fecha.toDate().toLocaleString(
+                                "es-MX"
+                            );
+
+                    }
+
+
+                    /* ================================
+                       PRODUCTOS
+                    ================================= */
+
+                    let productosHTML = "";
+
+                    if (Array.isArray(pedido.productos)) {
+
+                        pedido.productos.forEach((producto) => {
+
+                            productosHTML += `
+                                <div class="producto">
+
+                                    <span>
+                                        ${producto.cantidad || 1}
+                                        ×
+                                        ${producto.nombre || "Producto"}
+                                    </span>
+
+                                    <strong>
+                                        $${Number(producto.precio || 0).toFixed(2)}
+                                    </strong>
+
+                                </div>
+                            `;
+
+                        });
+
+                    } else {
+
+                        productosHTML = `
+                            <div class="producto">
+                                <span>
+                                    ${pedido.producto || "Sin productos"}
+                                </span>
+                            </div>
+                        `;
+
+                    }
+
+
+                    /* ================================
+                       COMPROBANTE
+                    ================================= */
+
+                    let comprobanteHTML = "";
+
+                    if (pedido.comprobante) {
+
+                        comprobanteHTML = `
+                            <div class="comprobante">
+                                📄
+                                <a
+                                    href="${pedido.comprobante}"
+                                    target="_blank"
+                                >
+                                    Ver comprobante
+                                </a>
+                            </div>
+                        `;
+
+                    }
+
+
+                    /* ================================
+                       TARJETA DEL PEDIDO
+                    ================================= */
+
+                    const tarjeta = document.createElement("article");
+
+                    tarjeta.className = "pedido";
+
+
+                    tarjeta.innerHTML = `
+
+                        <div class="pedido-cabecera">
+
+                            <div>
+                                <h3>
+                                    🧾 Pedido #${idPedido.substring(0, 8)}
+                                </h3>
+
+                                <div class="fecha">
+                                    ${fechaTexto}
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="datos">
+
+                            <div class="dato">
+
+                                <strong>👤 Estudiante</strong>
+
+                                ${pedido.nombre || "No indicado"}
+
+                            </div>
+
+
+                            <div class="dato">
+
+                                <strong>🏫 Grupo</strong>
+
+                                ${pedido.grupo || "No indicado"}
+
+                            </div>
+
+
+                            <div class="dato">
+
+                                <strong>💳 Forma de pago</strong>
+
+                                ${pedido.metodoPago || "No indicado"}
+
+                            </div>
+
+
+                            <div class="dato">
+
+                                <strong>📌 Estado actual</strong>
+
+                                ${estado}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="productos">
+
+                            <h4>🍔 Productos</h4>
+
+                            ${productosHTML}
+
+                        </div>
+
+
+                        <div class="pago">
+
+                            <strong>💰 Total del pedido:</strong>
+
+                            $${total.toFixed(2)}
+
+                            ${comprobanteHTML}
+
+                        </div>
+
+
+                        <div class="total">
+
+                            Total: $${total.toFixed(2)}
+
+                        </div>
+
+
+                        <div class="acciones">
+
+                            <label>
+                                🔄 Cambiar estado
+                            </label>
+
+                            <select class="estado">
+
+                                <option value="Pendiente"
+                                    ${estado === "Pendiente" ? "selected" : ""}>
+                                    ⏳ Pendiente
+                                </option>
+
+                                <option value="Preparando"
+                                    ${estado === "Preparando" ? "selected" : ""}>
+                                    👨‍🍳 Preparando
+                                </option>
+
+                                <option value="Listo"
+                                    ${estado === "Listo" ? "selected" : ""}>
+                                    ✅ Listo
+                                </option>
+
+                                <option value="Entregado"
+                                    ${estado === "Entregado" ? "selected" : ""}>
+                                    📦 Entregado
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    `;
+
+
+                    lista.appendChild(tarjeta);
+
+                });
+
+
+                document.getElementById("pedidosPendientes").textContent =
+                    pendientes;
+
+
+                document.getElementById("ventasTotales").textContent =
+                    "$" + ventas.toFixed(2);
+
+
+                cargando.style.display = "none";
+
+
+            } catch (error) {
+
+                console.error("Error cargando pedidos:", error);
+
+                cargando.innerHTML = `
+                    ❌ No se pudieron cargar los pedidos.
+                    <br><br>
+                    Revisa las reglas de Firestore.
+                `;
+
+            }
+
+        };
+
+
+        /* ==========================================
+           CERRAR SESIÓN
+        ========================================== */
+
+        window.cerrarSesion = async function() {
+
+            try {
+
+                await signOut(auth);
+
+                window.location.href = "index.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Error cerrando sesión:",
+                    error
+                );
+
+            }
+
+        };
+
+    </script>
+
+</body>
+</html>
