@@ -17,11 +17,32 @@
 </main>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import{getAuth,onAuthStateChanged,signOut,setPersistence,browserLocalPersistence}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import{getFirestore,collection,getDocs,query,orderBy,doc,updateDoc}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyBLx0K7VlFsgJ_Hb_xeDTOFAmS_Kgwxnos",authDomain:"cafeteria-cecytem.firebaseapp.com",projectId:"cafeteria-cecytem",storageBucket:"cafeteria-cecytem.firebasestorage.app",messagingSenderId:"756924498889",appId:"1:756924498889:web:b370685487cfe397eb9e18",measurementId:"G-QM14B3YP62"};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-onAuthStateChanged(auth,usuario=>{if(!usuario){window.location.href="index.html";return;}cargarPedidos();cargarAlumnos();});
+
+// 1) Fijamos la persistencia local para que la sesión se mantenga al cambiar de página.
+//    Si falla (p. ej. en file://), al menos avisamos en consola.
+await setPersistence(auth, browserLocalPersistence).catch(e=>console.warn("No se pudo fijar la persistencia local:",e));
+
+// 2) Control de acceso. Solo redirige una vez que Firebase ya resolvió el estado.
+let redirigido=false;
+onAuthStateChanged(auth,usuario=>{
+  if(!usuario){
+    if(redirigido) return;        // evita bucles de redirección
+    redirigido=true;
+    window.location.href="index.html";
+    return;
+  }
+  // (Opcional) Restringir SOLO a la encargada por correo:
+  // const CORREO_ENCARGADA="encargada@cecytem.com";
+  // if(usuario.email!==CORREO_ENCARGADA){ alert("No tienes permiso para entrar aquí."); signOut(auth); return; }
+
+  cargarPedidos();
+  cargarAlumnos();
+});
+
 const escapeHTML=v=>String(v??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 window.cargarPedidos=async function(){const lista=document.getElementById("listaPedidos"),cargando=document.getElementById("cargando");cargando.style.display="block";lista.innerHTML="";try{const q=query(collection(db,"pedidos"),orderBy("fecha","desc")),res=await getDocs(q);document.getElementById("totalPedidos").textContent=res.size;let pendientes=0,ventas=0;if(res.empty){lista.innerHTML='<div class="sin-pedidos"><div class="emoji">📭</div><h2>No hay pedidos todavía</h2><p>Cuando un estudiante haga un pedido, aparecerá aquí.</p></div>';}res.forEach(d=>{const p=d.data(),id=d.id,estado=p.estado||"Pendiente",total=Number(p.total)||0;if(estado.toLowerCase()==="pendiente")pendientes++;ventas+=total;const fecha=p.fecha?.toDate?p.fecha.toDate().toLocaleString("es-MX"):"Sin fecha";let productosHTML="";if(Array.isArray(p.productos)){productosHTML=p.productos.map(x=>`<div class="producto"><span>${Number(x.cantidad)||1} × ${escapeHTML(x.nombre||"Producto")}</span><strong>$${(Number(x.precio)||0).toFixed(2)}</strong></div>`).join("");}else{productosHTML=`<div class="producto">${escapeHTML(p.producto||"Sin productos")}</div>`;}const comprobante=p.comprobante?`<div class="comprobante">📄 <a href="${escapeHTML(p.comprobante)}" target="_blank" rel="noopener">Ver comprobante</a></div>`:"";const card=document.createElement("article");card.className="pedido";card.innerHTML=`<div class="pedido-cabecera"><div><h3>🧾 Pedido #${escapeHTML(id.slice(0,8))}</h3><div class="fecha">${escapeHTML(fecha)}</div></div></div><div class="datos"><div class="dato"><strong>👤 Estudiante</strong>${escapeHTML(p.nombre||"No indicado")}</div><div class="dato"><strong>🏫 Grupo</strong>${escapeHTML(p.grupo||"No indicado")}</div><div class="dato"><strong>💳 Forma de pago</strong>${escapeHTML(p.metodoPago||"No indicado")}</div><div class="dato"><strong>📌 Estado actual</strong>${escapeHTML(estado)}</div></div><div class="productos"><h4>🍔 Productos</h4>${productosHTML}</div><div class="pago"><strong>💰 Total del pedido:</strong> $${total.toFixed(2)}${comprobante}</div><div class="total">Total: $${total.toFixed(2)}</div><div class="acciones"><label>🔄 Cambiar estado</label><select class="estado" aria-label="Estado del pedido"><option ${estado==="Pendiente"?'selected':''}>Pendiente</option><option ${estado==="Preparando"?'selected':''}>Preparando</option><option ${estado==="Listo"?'selected':''}>Listo</option><option ${estado==="Entregado"?'selected':''}>Entregado</option></select><p class="mensaje-estado" aria-live="polite"></p></div>`;const sel=card.querySelector("select");sel.addEventListener("change",async()=>{sel.disabled=true;try{await updateDoc(doc(db,"pedidos",id),{estado:sel.value});card.querySelector(".mensaje-estado").textContent="Estado guardado.";await cargarPedidos();}catch(e){console.error(e);card.querySelector(".mensaje-estado").textContent="No se pudo guardar. Revisa las reglas de Firestore.";sel.disabled=false;}});lista.appendChild(card);});document.getElementById("pedidosPendientes").textContent=pendientes;document.getElementById("ventasTotales").textContent="$"+ventas.toFixed(2);cargando.style.display="none";}catch(e){console.error(e);cargando.textContent="❌ No se pudieron cargar los pedidos. Revisa las reglas de Firestore.";}};
 let alumnosCache=[];window.cargarAlumnos=async function(){const lista=document.getElementById("listaAlumnos"),cargando=document.getElementById("cargandoAlumnos");cargando.style.display="block";lista.innerHTML="";try{const res=await getDocs(query(collection(db,"alumnos"),orderBy("fechaRegistro","desc")));alumnosCache=res.docs.map(d=>({id:d.id,...d.data()}));mostrarAlumnos();cargando.style.display="none";}catch(e){console.error("Error cargando alumnos:",e);cargando.textContent="❌ No se pudieron consultar los alumnos. Verifica que la colección alumnos exista y que las reglas permitan la lectura a la encargada.";}};
@@ -29,4 +50,3 @@ function mostrarAlumnos(){const lista=document.getElementById("listaAlumnos"),fi
 document.getElementById("buscarAlumno").addEventListener("input",mostrarAlumnos);
 window.cerrarSesion=async()=>{try{await signOut(auth);window.location.href="index.html";}catch(e){console.error("Error cerrando sesión",e);alert("No se pudo cerrar la sesión.");}};
 </script></body></html>
-
