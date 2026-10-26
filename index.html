@@ -1509,43 +1509,42 @@
 
 
 
-<!-- ==========================================
 
-     PEDIDO REALIZADO
-
-========================================== -->
-
-
+<!-- PEDIDO REALIZADO CON QR -->
 <div id="pedidoRealizado" class="modal">
-
-
     <div class="formulario">
 
-
-        <h2>
-
-            ✅ ¡Pedido realizado!
-
-        </h2>
-
+        <h2>✅ ¡Pedido realizado!</h2>
 
         <p id="mensajePedido"></p>
 
+        <div id="qrPedidoContenedor"
+             style="margin:20px auto;padding:16px;background:#fff;border:2px solid #006b3f;border-radius:14px;max-width:320px;text-align:center;">
 
-        <button class="btn-confirmar"
+            <h3 style="color:#006b3f;">🎟️ QR de tu pedido</h3>
 
+            <div id="qrPedido"
+                 style="display:flex;justify-content:center;margin:12px 0;">
+            </div>
+
+            <p style="font-size:13px;color:#444;">
+                Muestra este código QR a la encargada para identificar tu pedido.
+            </p>
+
+            <button type="button"
+                    class="btn-confirmar"
+                    onclick="descargarQRPedido()">
+                ⬇️ Descargar QR
+            </button>
+        </div>
+
+        <button type="button"
+                class="btn-confirmar"
                 onclick="cerrarPedidoYRegresar()">
-
-
             Regresar al inicio
-
-
         </button>
 
-
     </div>
-
-
 </div>
 
 
@@ -2596,80 +2595,70 @@ function generarTextoPedido() {
 
 
 
-/* ==========================================
+function mostrarPedidoRealizado(formaPago, informacionExtra) {
+    
+async function mostrarPedidoRealizado(formaPago, informacionExtra) {
+    const ventana = document.getElementById("pedidoRealizado");
+    const contenedorQR = document.getElementById("qrPedido");
+    const mensaje = document.getElementById("mensajePedido");
 
-   MOSTRAR PEDIDO REALIZADO
+    ventana.style.display = "flex";
+    contenedorQR.innerHTML = "";
+    mensaje.textContent = "Guardando tu pedido en Firestore...";
 
-========================================== */
+    try {
+        // Guardar primero el pedido en Firestore
+        const idPedido = await window.guardarPedidoEnFirestore(
+            pedidoActual,
+            formaPago
+        );
 
+        // El QR contiene un enlace al pedido real
+        const urlConsulta =
+            window.location.origin +
+            window.location.pathname +
+            "?pedido=" + encodeURIComponent(idPedido);
 
-function mostrarPedidoRealizado(
+        document.getElementById("qrPedidoContenedor").dataset.codigo =
+            "pedido-" + idPedido;
 
-    formaPago,
+        if (typeof QRCode === "undefined") {
+            throw new Error("No se cargó el generador QR.");
+        }
 
-    informacionExtra
+        new QRCode(contenedorQR, {
+            text: urlConsulta,
+            width: 220,
+            height: 220,
+            colorDark: "#006b3f",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
 
-) {
+        mensaje.innerHTML =
+            "✅ ¡Pedido guardado correctamente!<br><br>" +
+            "👤 Alumno: <b>" +
+            escaparHTML(pedidoActual.nombre) + "</b><br><br>" +
+            "🎓 Grupo: <b>" +
+            escaparHTML(pedidoActual.grupo) + "</b><br><br>" +
+            "🍽️ Pedido:<br>" + generarTextoPedido() +
+            "<br><br>💰 Total: <b>$" +
+            Number(pedidoActual.total).toFixed(2) +
+            "</b><br><br>💳 Forma de pago: <b>" +
+            escaparHTML(formaPago) +
+            "</b><br><br>🧾 ID del pedido: <b>" +
+            escaparHTML(idPedido) +
+            "</b><br><br>" + informacionExtra +
+            "<br><br>📱 Guarda el QR para consultar el pedido.";
 
-
-    document.getElementById("pedidoRealizado").style.display =
-
-        "flex";
-
-
-
-
-    document.getElementById("mensajePedido").innerHTML =
-
-
-        "👤 Estudiante: <b>" +
-
-        escaparHTML(pedidoActual.nombre) +
-
-        "</b><br><br>" +
-
-
-        "🎓 Grupo: <b>" +
-
-        escaparHTML(pedidoActual.grupo) +
-
-        "</b><br><br>" +
-
-
-        "🍽️ <b>Pedido:</b><br><br>" +
-
-
-        generarTextoPedido() +
-
-
-        "<br><br>" +
-
-
-        "💰 Total: <b>$" +
-
-        pedidoActual.total.toFixed(2) +
-
-        "</b><br><br>" +
-
-
-        "💳 Forma de pago: <b>" +
-
-        formaPago +
-
-        "</b><br><br>" +
-
-
-        informacionExtra +
-
-
-        "<br><br>" +
-
-
-        "✅ Tu pedido ha sido registrado correctamente.";
-
-
+    } catch (error) {
+        console.error("Error guardando el pedido:", error);
+        contenedorQR.innerHTML = "";
+        mensaje.textContent =
+            "No se pudo guardar el pedido en Firestore. " +
+            "Revisa tu conexión y las reglas de la base de datos.";
+    }
 }
-
 
 
 
@@ -3933,6 +3922,142 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+/* ==========================================
+   GUARDAR PEDIDO EN FIRESTORE
+========================================== */
+
+window.guardarPedidoEnFirestore = async function(pedido, formaPago) {
+    const referencia = await addDoc(collection(db, "pedidos"), {
+        codigo: "CEC-" + Date.now().toString(36).toUpperCase(),
+        nombre: pedido.nombre,
+        grupo: pedido.grupo,
+        productos: pedido.productos.map(p => ({
+            nombre: p.nombre,
+            cantidad: p.cantidad,
+            precio: p.precio
+        })),
+        total: pedido.total,
+        metodoPago: formaPago,
+        estado: "pendiente",
+        fecha: serverTimestamp()
+    });
+
+    return referencia.id;
+};
+
+
+/* ==========================================
+   CONSULTAR PEDIDO POR SU ID
+========================================== */
+
+window.consultarPedidoEnFirestore = async function(id) {
+    const referencia = doc(db, "pedidos", id);
+    const resultado = await getDoc(referencia);
+
+    if (!resultado.exists()) {
+        alert("No se encontró ese pedido en Firestore.");
+        return;
+    }
+
+    const pedido = resultado.data();
+
+    const panel = document.createElement("section");
+    panel.style.cssText =
+        "position:fixed;inset:0;z-index:99999;background:#f4f7f5;" +
+        "overflow:auto;padding:25px;font-family:Arial,sans-serif;";
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = "🧾 Pedido de Cafetería CECyTEM";
+
+    const datos = document.createElement("div");
+    datos.style.cssText =
+        "max-width:600px;margin:20px auto;background:white;" +
+        "padding:22px;border-radius:15px;box-shadow:0 3px 15px #ccc;";
+
+    const nombre = document.createElement("p");
+    nombre.textContent = "Alumno: " + (pedido.nombre || "");
+
+    const grupo = document.createElement("p");
+    grupo.textContent = "Grupo: " + (pedido.grupo || "");
+
+    const codigo = document.createElement("p");
+    codigo.textContent = "ID del pedido: " + resultado.id;
+
+    const total = document.createElement("p");
+    total.textContent = "Total: $" + Number(pedido.total || 0).toFixed(2);
+
+    const pago = document.createElement("p");
+    pago.textContent = "Forma de pago: " + (pedido.metodoPago || "No indicada");
+
+    const estado = document.createElement("p");
+    estado.textContent = "Estado: " + (pedido.estado || "Sin estado");
+
+    const subtitulo = document.createElement("h3");
+    subtitulo.textContent = "Productos";
+
+    const lista = document.createElement("ul");
+
+    (pedido.productos || []).forEach(producto => {
+        const elemento = document.createElement("li");
+        elemento.textContent =
+            `${producto.cantidad} x ${producto.nombre} — $${(
+                Number(producto.precio || 0) *
+                Number(producto.cantidad || 0)
+            ).toFixed(2)}`;
+        lista.appendChild(elemento);
+    });
+
+    const cerrar = document.createElement("button");
+    cerrar.textContent = "Cerrar consulta";
+    cerrar.style.cssText =
+        "background:#006b3f;color:white;padding:12px 18px;" +
+        "border:0;border-radius:8px;cursor:pointer;";
+    cerrar.onclick = () => panel.remove();
+
+    datos.append(
+        nombre, grupo, codigo, total, pago, estado,
+        subtitulo, lista, cerrar
+    );
+
+    panel.append(titulo, datos);
+    document.body.appendChild(panel);
+};
+
+
+/* ==========================================
+   ABRIR CONSULTA SI VIENE DE UN QR
+========================================== */
+
+const pedidoSolicitado =
+    new URLSearchParams(window.location.search).get("pedido");
+
+if (pedidoSolicitado) {
+    import("https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js")
+        .then(({ onAuthStateChanged }) => {
+            onAuthStateChanged(auth, async usuario => {
+                if (usuario) {
+                    try {
+                        await window.consultarPedidoEnFirestore(
+                            pedidoSolicitado
+                        );
+                    } catch (error) {
+                        console.error(error);
+                        alert(
+                            "No se pudo consultar el pedido. " +
+                            "Verifica tu sesión y las reglas de Firestore."
+                        );
+                    }
+                } else {
+                    alert(
+                        "Para consultar este pedido, inicia sesión " +
+                        "como usuario autorizado de la cafetería."
+                    );
+                }
+            });
+        });
+}
+
+
 
 
 
@@ -4558,7 +4683,288 @@ if ("serviceWorker" in navigator) {
 
 
 
+<!-- EDITOR DEL MENÚ -->
+<div id="editorMenu" class="modal" style="display:none; z-index:10000; overflow-y:auto;">
+    <div class="formulario" style="width:min(900px,95vw); max-height:90vh; overflow:auto;">
+        <h2>📝 Administrar menú y existencias</h2>
 
+        <p>Edita las comidas, descripciones, precios y porciones disponibles.</p>
+
+        <label for="editorDia">Selecciona el día:</label>
+
+        <select id="editorDia" onchange="prepararEditorMenu()" style="width:100%;padding:12px;margin:8px 0 16px;">
+            <option value="lunes">Lunes</option>
+            <option value="martes">Martes</option>
+            <option value="miercoles">Miércoles</option>
+            <option value="jueves">Jueves</option>
+            <option value="viernes">Viernes</option>
+        </select>
+
+        <div id="camposEditorMenu"></div>
+
+        <p id="mensajeEditorMenu" role="status"></p>
+
+        <button type="button" class="btn-confirmar" onclick="guardarMenuEditado()">
+            💾 Guardar cambios
+        </button>
+
+        <button type="button" class="btn-cancelar"
+                onclick="document.getElementById('editorMenu').style.display='none'">
+            Cerrar
+        </button>
+    </div>
+</div>
+
+<script type="module">
+import {
+    doc,
+    getDoc,
+    setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// Usa la conexión de Firebase que ya tienes en tu index.html.
+const menuFirestore = db;
+
+const diasMenu = [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes"
+];
+
+let menuEditorDatos = {};
+
+function obtenerTarjetasDia(dia) {
+    const seccion = document.getElementById(dia);
+
+    if (!seccion) return [];
+
+    return Array.from(seccion.querySelectorAll(".producto")).map((tarjeta, indice) => {
+        const nombre = tarjeta.querySelector("h3");
+        const descripcion = tarjeta.querySelector("p:not(.precio)");
+        const precio = tarjeta.querySelector(".precio");
+        const boton = tarjeta.querySelector(".btn-pedir");
+
+        return {
+            id: String(indice),
+            nombre: nombre?.textContent.trim() || "",
+            descripcion: descripcion?.textContent.trim() || "",
+            precio: Number((precio?.textContent || "").replace(/[^\d.]/g, "")) || 0,
+            disponibles: Number(tarjeta.dataset.disponibles ?? 20),
+            tarjeta,
+            nombreElemento: nombre,
+            descripcionElemento: descripcion,
+            precioElemento: precio,
+            boton
+        };
+    });
+}
+
+function datosInicialesDia(dia) {
+    return obtenerTarjetasDia(dia).map(producto => ({
+        id: producto.id,
+        nombre: producto.nombre,
+        descripcion: producto.descripcion,
+        precio: producto.precio,
+        disponibles: producto.disponibles
+    }));
+}
+
+async function cargarMenuDesdeFirestore() {
+    for (const dia of diasMenu) {
+        try {
+            const referencia = doc(menuFirestore, "menus", dia);
+            const documento = await getDoc(referencia);
+
+            if (documento.exists()) {
+                menuEditorDatos[dia] = documento.data().productos || [];
+            } else {
+                menuEditorDatos[dia] = datosInicialesDia(dia);
+
+                if (auth.currentUser) {
+                    await setDoc(referencia, {
+                        productos: menuEditorDatos[dia],
+                        actualizado: new Date()
+                    });
+                }
+            }
+
+            aplicarMenuEnPagina(dia);
+        } catch (error) {
+            console.error("Error cargando el menú de " + dia, error);
+        }
+    }
+}
+
+function aplicarMenuEnPagina(dia) {
+    const tarjetas = obtenerTarjetasDia(dia);
+    const productos = menuEditorDatos[dia] || [];
+
+    tarjetas.forEach((tarjeta, indice) => {
+        const producto = productos[indice];
+        if (!producto) return;
+
+        tarjeta.nombreElemento.textContent = producto.nombre;
+        tarjeta.descripcionElemento.textContent = producto.descripcion;
+        tarjeta.precioElemento.textContent = "$" + producto.precio;
+        tarjeta.tarjeta.dataset.disponibles = producto.disponibles;
+
+        let inventario = tarjeta.tarjeta.querySelector(".cantidad-disponible");
+
+        if (!inventario) {
+            inventario = document.createElement("p");
+            inventario.className = "cantidad-disponible";
+            tarjeta.precioElemento.after(inventario);
+        }
+
+        inventario.textContent = "Porciones disponibles: " + producto.disponibles;
+
+        if (tarjeta.boton) {
+            tarjeta.boton.disabled = producto.disponibles <= 0;
+            tarjeta.boton.textContent = producto.disponibles <= 0
+                ? "Agotado"
+                : "Pedir";
+
+            tarjeta.boton.style.opacity = producto.disponibles <= 0 ? "0.5" : "1";
+        }
+
+        if (tarjeta.boton) {
+            tarjeta.boton.setAttribute(
+                "onclick",
+                `abrirPedido(${JSON.stringify(producto.nombre)},${Number(producto.precio)})`
+            );
+        }
+    });
+}
+
+window.prepararEditorMenu = function() {
+    const dia = document.getElementById("editorDia").value;
+    const contenedor = document.getElementById("camposEditorMenu");
+
+    if (!menuEditorDatos[dia]) {
+        menuEditorDatos[dia] = datosInicialesDia(dia);
+    }
+
+    contenedor.innerHTML = "";
+
+    menuEditorDatos[dia].forEach((producto, indice) => {
+        const tarjeta = document.createElement("div");
+
+        tarjeta.style.cssText =
+            "border:1px solid #ddd;border-radius:12px;padding:15px;margin-bottom:15px;";
+
+        tarjeta.innerHTML = `
+            <h3>Comida ${indice + 1}</h3>
+
+            <label>Nombre de la comida</label>
+            <input type="text"
+                   class="editor-nombre"
+                   value="${escaparHTML(producto.nombre)}"
+                   style="width:100%;padding:10px;margin:5px 0 12px;">
+
+            <label>Descripción</label>
+            <textarea class="editor-descripcion"
+                      style="width:100%;padding:10px;margin:5px 0 12px;">${escaparHTML(producto.descripcion)}</textarea>
+
+            <label>Precio en pesos</label>
+            <input type="number"
+                   class="editor-precio"
+                   min="0"
+                   step="1"
+                   value="${Number(producto.precio) || 0}"
+                   style="width:100%;padding:10px;margin:5px 0 12px;">
+
+            <label>Porciones disponibles</label>
+            <input type="number"
+                   class="editor-disponibles"
+                   min="0"
+                   step="1"
+                   value="${Number(producto.disponibles) || 0}"
+                   style="width:100%;padding:10px;margin:5px 0 12px;">
+        `;
+
+        contenedor.appendChild(tarjeta);
+    });
+};
+
+window.guardarMenuEditado = async function() {
+    const dia = document.getElementById("editorDia").value;
+    const mensaje = document.getElementById("mensajeEditorMenu");
+    const contenedor = document.getElementById("camposEditorMenu");
+
+    if (!auth.currentUser) {
+        mensaje.textContent = "Debes iniciar sesión para guardar los cambios.";
+        return;
+    }
+
+    const tarjetas = Array.from(contenedor.children);
+
+    const productos = tarjetas.map((tarjeta, indice) => ({
+        id: String(indice),
+        nombre: tarjeta.querySelector(".editor-nombre").value.trim(),
+        descripcion: tarjeta.querySelector(".editor-descripcion").value.trim(),
+        precio: Number(tarjeta.querySelector(".editor-precio").value),
+        disponibles: Number(tarjeta.querySelector(".editor-disponibles").value)
+    }));
+
+    const invalido = productos.some(producto =>
+        !producto.nombre ||
+        !Number.isFinite(producto.precio) ||
+        producto.precio < 0 ||
+        !Number.isInteger(producto.disponibles) ||
+        producto.disponibles < 0
+    );
+
+    if (invalido) {
+        mensaje.textContent = "Revisa los nombres, precios y cantidades.";
+        return;
+    }
+
+    try {
+        mensaje.textContent = "Guardando cambios...";
+
+        await setDoc(doc(menuFirestore, "menus", dia), {
+            productos,
+            actualizado: new Date()
+        });
+
+        menuEditorDatos[dia] = productos;
+        aplicarMenuEnPagina(dia);
+
+        mensaje.textContent = "✅ Menú guardado correctamente.";
+    } catch (error) {
+        console.error("Error guardando menú:", error);
+        mensaje.textContent = "No se pudo guardar. Revisa las reglas de Firestore.";
+    }
+};
+
+function escaparHTML(texto) {
+    return String(texto ?? "").replace(/[&<>"']/g, caracter => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[caracter]);
+}
+
+window.abrirEditorMenu = async function() {
+    if (!auth.currentUser) {
+        alert("Inicia sesión como encargada para editar el menú.");
+        return;
+    }
+
+    await cargarMenuDesdeFirestore();
+
+    document.getElementById("modalEncargada").style.display = "none";
+    document.getElementById("editorMenu").style.display = "flex";
+
+    window.prepararEditorMenu();
+};
+
+cargarMenuDesdeFirestore();
+</script>
 </body>
 
 
