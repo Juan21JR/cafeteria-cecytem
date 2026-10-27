@@ -1,827 +1,191 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
     <title>Cafetería CECyTEM</title>
-
-
     <link rel="stylesheet" href="cafeteria.css">
-
-
     <link rel="manifest" href="manifest.json">
-
-
-<meta name="theme-color" content="#006b3f">
-
-
-<meta name="mobile-web-app-capable" content="yes">
-
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-
-<meta name="apple-mobile-web-app-title" content="Cafetería CECyTEM">
-
-
-<link rel="apple-touch-icon" href="imagenes/icon-192.png">
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-
+    <meta name="theme-color" content="#006b3f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Cafetería CECyTEM">
+    <link rel="apple-touch-icon" href="imagenes/icon-192.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-
-
 <body>
-
-
-<!-- ==========================================
-
-     ENCABEZADO
-
-========================================== -->
-
-
 <header>
-
-
     <div class="encabezado">
-
-
-        <img src="imagenes/cecylogo.jpg"
-
-             alt="Logo CECyTEM"
-
-             class="logo-cecytem">
-
-
+        <img src="imagenes/cecylogo.jpg" alt="Logo CECyTEM" class="logo-cecytem">
         <div class="titulo-cafeteria">
-
-
             <h1>CAFETERÍA CECyTEM</h1>
-
-
-            <p>
-
-                Sabor, energía y bienestar para nuestra comunidad estudiantil
-
-            </p>
-
-
-            <span>
-
-                🏫 Menú escolar • 🍔 Comida • 🎙️ Asistente de voz
-
-            </span>
-
-            <button class="btn-encargada" onclick="abrirAccesoEncargada()">
-
-    👩‍💼 Acceso de encargada
-
-</button>
-
-
+            <p>Sabor, energía y bienestar para nuestra comunidad estudiantil</p>
+            <span>🏫 Menú escolar • 🍔 Comida • 🎙️ Asistente de voz</span>
+            <button class="btn-encargada" onclick="abrirAccesoEncargada()">👩‍💼 Acceso de encargada</button>
         </div>
-
-
     </div>
-
-
 </header>
 
-
-
-
-<!-- ==========================================
-
-     INICIO
-
-========================================== -->
-
-
 <section id="inicio">
-
-
     <div class="bienvenida">
-
-
         <h2>🍽️ Menú de la semana</h2>
-
-
-        <p>
-
-            Consulta las comidas disponibles cada día
-
-            y realiza tu pedido fácilmente.
-
-        </p>
-
-
+        <p>Consulta las comidas disponibles cada día y realiza tu pedido fácilmente.</p>
     </div>
-
-
-
-
     <div class="botones-dias">
-
-
         <button onclick="abrirDia('lunes')">📅 Lunes</button>
-
-
         <button onclick="abrirDia('martes')">📅 Martes</button>
-
-
         <button onclick="abrirDia('miercoles')">📅 Miércoles</button>
-
-
         <button onclick="abrirDia('jueves')">📅 Jueves</button>
-
-
         <button onclick="abrirDia('viernes')">📅 Viernes</button>
-
-
     </div>
-
-
-
-
-    <!-- ==========================================
-
-         ASISTENTE
-
-    ========================================== -->
-
-
     <div class="asistente">
-
-
         <h3>🎙️ Asistente de la cafetería</h3>
-
-
-        <p>
-
-            Puedes preguntarme qué hay de comer, consultar precios
-
-            o hacer un pedido con varios productos.
-
-        </p>
-
-
-       <button class="btn-voz"&#x20;
-
-        onclick="activarVozYAsistente()">
-
-
-    🎙️ Hablar con el asistente
-
-
-</button>
-
-
-        <p id="estadoVoz">
-
-            Presiona el botón y dime qué necesitas.
-
-        </p>
-
-
+        <p>Puedes preguntarme qué hay de comer, consultar precios o hacer un pedido con varios productos.</p>
+        <button class="btn-voz" onclick="activarVozYAsistente()">🎙️ Hablar con el asistente</button>
+        <p id="estadoVoz">Presiona el botón y dime qué necesitas.</p>
     </div>
-
-
 </section>
-
-
-
-
-<!-- ==========================================
-
-     LUNES
-
-========================================== -->
-
 
 <section id="lunes" class="menu-dia">
-
-
     <h2>🍽️ Menú del Lunes</h2>
-
-
     <div class="productos">
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imagestacosdorados.jpg"
-
-                 alt="Tacos dorados">
-
-
+            <img src="imagenes/imagestacosdorados.jpg" alt="Tacos dorados">
             <h3>Tacos dorados de pollo</h3>
-
-
-            <p>
-
-                Tacos dorados de pollo con
-
-                lechuga, crema y queso.
-
-            </p>
-
-
+            <p>Tacos dorados de pollo con lechuga, crema y queso.</p>
             <p class="precio">$35</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Tacos dorados de pollo',35)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Tacos dorados de pollo',35)">Pedir</button>
         </div>
-
-
-
-
         <div class="producto">
-
-
-            <img src="imagenes/tortajamon.jpg"
-
-                 alt="Torta de jamón">
-
-
+            <img src="imagenes/tortajamon.jpg" alt="Torta de jamón">
             <h3>Torta de jamón y queso</h3>
-
-
-            <p>
-
-                Torta con jamón, queso,
-
-                lechuga, jitomate y aguacate.
-
-            </p>
-
-
+            <p>Torta con jamón, queso, lechuga, jitomate y aguacate.</p>
             <p class="precio">$40</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Torta de jamón y queso',40)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Torta de jamón y queso',40)">Pedir</button>
         </div>
-
-
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imagesyogurt.jpg"
-
-                 alt="Yogur con fruta">
-
-
+            <img src="imagenes/imagesyogurt.jpg" alt="Yogur con fruta">
             <h3>Yogur con fruta</h3>
-
-
-            <p>
-
-                Yogur natural con fruta
-
-                fresca y granola.
-
-            </p>
-
-
+            <p>Yogur natural con fruta fresca y granola.</p>
             <p class="precio">$30</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Yogur con fruta',30)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Yogur con fruta',30)">Pedir</button>
         </div>
-
-
     </div>
-
-
-    <button class="btn-salir"
-
-            onclick="regresarInicio()">
-
-        ← Regresar
-
-    </button>
-
-
+    <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
 </section>
-
-
-
-
-<!-- ==========================================
-
-     MARTES
-
-========================================== -->
-
 
 <section id="martes" class="menu-dia">
-
-
     <h2>🍽️ Menú del Martes</h2>
-
-
     <div class="productos">
-
-
         <div class="producto">
-
-
-            <img src="imagenes/Hamburguesa.jpg"
-
-                 alt="Hamburguesa">
-
-
+            <img src="imagenes/Hamburguesa.jpg" alt="Hamburguesa">
             <h3>Hamburguesa</h3>
-
-
-            <p>
-
-                Hamburguesa con carne,
-
-                queso, lechuga y jitomate.
-
-            </p>
-
-
+            <p>Hamburguesa con carne, queso, lechuga y jitomate.</p>
             <p class="precio">$50</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Hamburguesa',50)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Hamburguesa',50)">Pedir</button>
         </div>
-
-
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imagesburrito.jpg"
-
-                 alt="Burrito">
-
-
+            <img src="imagenes/imagesburrito.jpg" alt="Burrito">
             <h3>Burrito de pollo</h3>
-
-
-            <p>
-
-                Burrito de pollo con arroz,
-
-                frijoles, queso y verduras.
-
-            </p>
-
-
+            <p>Burrito de pollo con arroz, frijoles, queso y verduras.</p>
             <p class="precio">$40</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Burrito de pollo',40)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Burrito de pollo',40)">Pedir</button>
         </div>
-
-
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imageshotcakes.jpg"
-
-                 alt="Hot cakes">
-
-
+            <img src="imagenes/imageshotcakes.jpg" alt="Hot cakes">
             <h3>Hot cakes con fruta</h3>
-
-
-            <p>
-
-                Hot cakes con fruta
-
-                fresca y miel.
-
-            </p>
-
-
+            <p>Hot cakes con fruta fresca y miel.</p>
             <p class="precio">$35</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Hot cakes con fruta',35)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Hot cakes con fruta',35)">Pedir</button>
         </div>
-
-
     </div>
-
-
-    <button class="btn-salir"
-
-            onclick="regresarInicio()">
-
-        ← Regresar
-
-    </button>
-
-
+    <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
 </section>
-
-
-
-
-<!-- ==========================================
-
-     MIÉRCOLES
-
-========================================== -->
-
 
 <section id="miercoles" class="menu-dia">
-
-
     <h2>🍽️ Menú del Miércoles</h2>
-
-
     <div class="productos">
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imagesquesadillas.jpg"
-
-                 alt="Quesadillas">
-
-
+            <img src="imagenes/imagesquesadillas.jpg" alt="Quesadillas">
             <h3>Quesadillas de queso y jamón</h3>
-
-
-            <p>
-
-                Quesadillas calientes
-
-                con queso y jamón.
-
-            </p>
-
-
+            <p>Quesadillas calientes con queso y jamón.</p>
             <p class="precio">$30</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Quesadillas de queso y jamón',30)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Quesadillas de queso y jamón',30)">Pedir</button>
         </div>
-
-
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imageshotdog.jpg"
-
-                 alt="Hot dog">
-
-
+            <img src="imagenes/imageshotdog.jpg" alt="Hot dog">
             <h3>Hot dog con papas</h3>
-
-
-            <p>
-
-                Hot dog con salchicha,
-
-                jitomate, cebolla y papas.
-
-            </p>
-
-
+            <p>Hot dog con salchicha, jitomate, cebolla y papas.</p>
             <p class="precio">$35</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Hot dog con papas',35)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Hot dog con papas',35)">Pedir</button>
         </div>
-
-
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imageslicuado.jpg"
-
-                 alt="Licuado de plátano">
-
-
+            <img src="imagenes/imageslicuado.jpg" alt="Licuado de plátano">
             <h3>Licuado de plátano</h3>
-
-
-            <p>
-
-                Licuado de plátano
-
-                con leche y canela.
-
-            </p>
-
-
+            <p>Licuado de plátano con leche y canela.</p>
             <p class="precio">$30</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Licuado de plátano',30)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Licuado de plátano',30)">Pedir</button>
         </div>
-
-
     </div>
-
-
-    <button class="btn-salir"
-
-            onclick="regresarInicio()">
-
-        ← Regresar
-
-    </button>
-
-
+    <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
 </section>
-
-
-
-
-<!-- ==========================================
-
-     JUEVES
-
-========================================== -->
-
 
 <section id="jueves" class="menu-dia">
-
-
     <h2>🍽️ Menú del Jueves</h2>
-
-
     <div class="productos">
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imagestortamilanesa.jpg"
-
-                 alt="Torta de milanesa">
-
-
+            <img src="imagenes/imagestortamilanesa.jpg" alt="Torta de milanesa">
             <h3>Torta de milanesa</h3>
-
-
-            <p>
-
-                Torta de milanesa con
-
-                lechuga, queso y aguacate.
-
-            </p>
-
-
+            <p>Torta de milanesa con lechuga, queso y aguacate.</p>
             <p class="precio">$45</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Torta de milanesa',45)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Torta de milanesa',45)">Pedir</button>
         </div>
-
-
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imagestacosbistec.jpg"
-
-                 alt="Tacos de bistec">
-
-
+            <img src="imagenes/imagestacosbistec.jpg" alt="Tacos de bistec">
             <h3>Tacos de bistec</h3>
-
-
-            <p>
-
-                Tacos de bistec con
-
-                cebolla, cilantro y salsa.
-
-            </p>
-
-
+            <p>Tacos de bistec con cebolla, cilantro y salsa.</p>
             <p class="precio">$45</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Tacos de bistec',45)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Tacos de bistec',45)">Pedir</button>
         </div>
-
-
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imagesensaladafrutas.jpg"
-
-                 alt="Ensalada de frutas">
-
-
+            <img src="imagenes/imagesensaladafrutas.jpg" alt="Ensalada de frutas">
             <h3>Ensalada de frutas</h3>
-
-
-            <p>
-
-                Frutas frescas
-
-                con yogur.
-
-            </p>
-
-
+            <p>Frutas frescas con yogur.</p>
             <p class="precio">$30</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Ensalada de frutas',30)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Ensalada de frutas',30)">Pedir</button>
         </div>
-
-
     </div>
-
-
-    <button class="btn-salir"
-
-            onclick="regresarInicio()">
-
-        ← Regresar
-
-    </button>
-
-
+    <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
 </section>
 
-
-
-
-<!-- ==========================================
-
-     VIERNES
-
-========================================== -->
-
-
 <section id="viernes" class="menu-dia">
-
-
     <h2>🍽️ Menú del Viernes</h2>
-
-
     <div class="productos">
-
-
         <div class="producto">
-
-
-            <img src="imagenes/imagespizza.jpg"
-
-                 alt="Pizza">
-
-
+            <img src="imagenes/imagespizza.jpg" alt="Pizza">
             <h3>Pizza individual</h3>
-
-
-            <p>
-
-                Pizza individual con
-
-                queso y pepperoni.
-
-            </p>
-
-
+            <p>Pizza individual con queso y pepperoni.</p>
             <p class="precio">$45</p>
-
-
-            <button class="btn-pedir"
-
-                    onclick="abrirPedido('Pizza individual',45)">
-
-                Pedir
-
-            </button>
-
-
+            <button class="btn-pedir" onclick="abrirPedido('Pizza individual',45)">Pedir</button>
         </div>
+        <div class="producto">
+            <img src="imagenes/clubsandwich.jpg" alt="Club sandwich">
+            <h3>Club sándwich</h3>
+            <p>Sándwich con jamón, queso, pollo y verduras.</p>
+            <p class="precio">$45</p>
+            <button class="btn-pedir" onclick="abrirPedido('Club sándwich',45)">Pedir</button>
+        </div>
+        <div class="producto">
+            <img src="imagenes/waffles.jpg" alt="Waffles">
+            <h3>Waffles con fruta</h3>
+            <p>Waffles con fruta fresca y miel.</p>
+            <p class="precio">$40</p>
+            <button class="btn-pedir" onclick="abrirPedido('Waffles con fruta',40)">Pedir</button>
+        </div>
+    </div>
+    <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
+</section>
 
 
 
