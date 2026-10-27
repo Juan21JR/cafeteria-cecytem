@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafetería CECyTEM</title>
+<link rel="stylesheet" href="cafeteria.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#006b3f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cafetería CECyTEM">
+<link rel="apple-touch-icon" href="imagenes/icon-192.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="encabezado">
+    <img src="imagenes/cecylogo.jpg" alt="Logo CECyTEM" class="logo-cecytem">
+    <div class="titulo-cafeteria">
+      <h1>CAFETERÍA CECyTEM</h1>
+      <p>Sabor, energía y bienestar para nuestra comunidad estudiantil</p>
+      <span>🏫 Menú escolar • 🍔 Comida • 🎙️ Asistente de voz</span>
+      <button class="btn-encargada" onclick="abrirAccesoEncargada()">👩‍💼 Acceso de encargada</button>
+    </div>
+  </div>
+</header>
+
+<section id="inicio">
+  <div class="bienvenida">
+    <h2>🍽️ Menú de la semana</h2>
+    <p>Consulta las comidas disponibles cada día y realiza tu pedido fácilmente.</p>
+  </div>
+  <div class="botones-dias">
+    <button onclick="abrirDia('lunes')">📅 Lunes</button>
+    <button onclick="abrirDia('martes')">📅 Martes</button>
+    <button onclick="abrirDia('miercoles')">📅 Miércoles</button>
+    <button onclick="abrirDia('jueves')">📅 Jueves</button>
+    <button onclick="abrirDia('viernes')">📅 Viernes</button>
+  </div>
+  <div class="asistente">
+    <h3>🎙️ Asistente de la cafetería</h3>
+    <p>Puedes preguntarme qué hay de comer, consultar precios o hacer un pedido con varios productos.</p>
+    <button class="btn-voz" onclick="activarVozYAsistente()">🎙️ Hablar con el asistente</button>
+    <p id="estadoVoz">Presiona el botón y dime qué necesitas.</p>
+  </div>
+</section>
+
+<section id="lunes" class="menu-dia">
+  <h2>🍽️ Menú del Lunes</h2>
+  <div class="productos" id="productos-lunes"></div>
+  <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
+</section>
+
+<section id="martes" class="menu-dia">
+  <h2>🍽️ Menú del Martes</h2>
+  <div class="productos" id="productos-martes"></div>
+  <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
+</section>
+
+<section id="miercoles" class="menu-dia">
+  <h2>🍽️ Menú del Miércoles</h2>
+  <div class="productos" id="productos-miercoles"></div>
+  <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
+</section>
+
+<section id="jueves" class="menu-dia">
+  <h2>🍽️ Menú del Jueves</h2>
+  <div class="productos" id="productos-jueves"></div>
+  <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
+</section>
+
+<section id="viernes" class="menu-dia">
+  <h2>🍽️ Menú del Viernes</h2>
+  <div class="productos" id="productos-viernes"></div>
+  <button class="btn-salir" onclick="regresarInicio()">← Regresar</button>
+</section>
+
+<!-- FORMULARIO DE PEDIDO -->
+<div id="ventanaPedido" class="modal">
+  <div class="formulario">
+    <h2>🛒 Realizar pedido</h2>
+    <div id="resumenPedido" class="resumen-pedido">
+      <h3>Tu pedido</h3>
+      <div id="listaPedido">No hay productos agregados.</div>
+      <div class="total-pedido"><span>Total:</span><span id="totalPedido">$0.00</span></div>
+    </div>
+    <form onsubmit="confirmarPedido(event)">
+      <label for="nombre">Nombre del estudiante:</label>
+      <input type="text" id="nombre" placeholder="Escribe tu nombre" required>
+      <label for="grupo">Grupo:</label>
+      <input type="text" id="grupo" placeholder="Ejemplo: 502" required>
+      <button type="submit" class="btn-confirmar">✓ Continuar al pago</button>
+      <button type="button" class="btn-cancelar" onclick="cerrarPedido()">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+<!-- FORMAS DE PAGO -->
+<div id="ventanaPago" class="modal">
+  <div class="formulario pago-formulario">
+    <div class="icono-pago">💳</div>
+    <h2>Forma de pago</h2>
+    <p class="texto-pago">Selecciona cómo deseas pagar tu pedido.</p>
+    <div class="resumen-pedido">
+      <h3>Resumen</h3>
+      <div id="resumenPago"></div>
+      <div class="total-pedido"><span>Total:</span><span id="totalPago">$0.00</span></div>
+    </div>
+    <div class="opciones-pago">
+      <button type="button" class="opcion-pago" onclick="mostrarTransferencia()">
+        <span class="icono-opcion">🏦</span>
+        <div><strong>Transferencia bancaria</strong><small>Paga desde tu aplicación bancaria</small></div>
+      </button>
+      <button type="button" class="opcion-pago" onclick="mostrarEfectivo()">
+        <span class="icono-opcion">💵</span>
+        <div><strong>Pago en efectivo</strong><small>Paga directamente en la cafetería</small></div>
+      </button>
+    </div>
+    <button type="button" class="btn-cancelar" onclick="cerrarPago()">Cancelar</button>
+  </div>
+</div>
+
+<!-- TRANSFERENCIA -->
+<div id="ventanaTransferencia" class="modal">
+  <div class="formulario transferencia-formulario">
+    <div class="icono-pago">🏦</div>
+    <h2>Pago por transferencia</h2>
+    <p class="texto-pago">Realiza tu transferencia con los siguientes datos:</p>
+    <div class="datos-transferencia">
+      <div class="dato-bancario"><span>🏦 Banco</span><strong>Banco de ejemplo</strong></div>
+      <div class="dato-bancario"><span>👤 Beneficiario</span><strong>Cafetería CECyTEM</strong></div>
+      <div class="dato-bancario"><span>💳 Número de cuenta</span><strong>0000000000</strong></div>
+      <div class="dato-bancario"><span>🔢 CLABE interbancaria</span><strong>000000000000000000</strong></div>
+      <div class="dato-bancario monto-transferencia"><span>💰 Monto a pagar</span><strong id="montoTransferencia">$0.00</strong></div>
+    </div>
+    <p class="aviso-transferencia">⚠️ Realiza la transferencia por el monto exacto de tu pedido.</p>
+    <label for="comprobante">Comprobante de transferencia</label>
+    <input type="file" id="comprobante" accept="image/*,.pdf">
+    <button type="button" class="btn-confirmar" onclick="confirmarTransferencia()">📤 Enviar comprobante</button>
+    <button type="button" class="btn-cancelar" onclick="cerrarTransferencia()">← Regresar</button>
+  </div>
+</div>
+
+<!-- EFECTIVO -->
+<div id="ventanaEfectivo" class="modal">
+  <div class="formulario pago-formulario">
+    <div class="icono-pago">💵</div>
+    <h2>Pago en efectivo</h2>
+    <p class="texto-pago">Tu pedido quedará registrado para realizar el pago directamente en la cafetería.</p>
+    <div class="efectivo-info">
+      <p>🧾 <strong>Pedido:</strong> <span id="pedidoEfectivo"></span></p>
+      <p>💰 <strong>Total:</strong> <span id="totalEfectivo"></span></p>
+    </div>
+    <button type="button" class="btn-confirmar" onclick="confirmarEfectivo()">✅ Confirmar pedido</button>
+    <button type="button" class="btn-cancelar" onclick="cerrarEfectivo()">Cancelar</button>
+  </div>
+</div>
+
+<!-- PEDIDO REALIZADO CON QR -->
+<div id="pedidoRealizado" class="modal">
+  <div class="formulario">
+    <h2>✅ ¡Pedido realizado!</h2>
+    <p id="mensajePedido"></p>
+    <div id="qrPedidoContenedor" style="margin:20px auto;padding:16px;background:#fff;border:2px solid #006b3f;border-radius:14px;max-width:320px;text-align:center;">
+      <h3 style="color:#006b3f;">🎟️ QR de tu pedido</h3>
+      <div id="qrPedido" style="display:flex;justify-content:center;margin:12px 0;"></div>
+      <p style="font-size:13px;color:#444;">Escanea este código QR para ver los datos del pedido.</p>
+      <button type="button" class="btn-confirmar" onclick="descargarQRPedido()">⬇️ Descargar QR</button>
+    </div>
+    <button type="button" class="btn-confirmar" onclick="cerrarPedidoYRegresar()">Regresar al inicio</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-contenido">
+    <h3>🏫 CAFETERÍA CECyTEM</h3>
+    <p>Sabor, energía y bienestar para nuestra comunidad estudiantil.</p>
+    <p>🍔 Menú escolar • 🎙️ Asistente de voz • 🛒 Pedidos • 💳 Pagos</p>
+    <p class="copyright">© 2026 Cafetería CECyTEM</p>
+  </div>
+</footer>
+
+<script>
+/* CATÁLOGO (solo lo usa el asistente de voz para reconocer palabras) */
+const productosDisponibles = [
+  { nombre: "Tacos dorados de pollo", precio: 35, palabras: ["tacos dorados","taco dorado","tacos de pollo"] },
+  { nombre: "Torta de jamón y queso", precio: 40, palabras: ["torta de jamon","torta jamon"] },
+  { nombre: "Yogur con fruta", precio: 30, palabras: ["yogur","yogurt"] },
+  { nombre: "Hamburguesa", precio: 50, palabras: ["hamburguesa","hamburguesas"] },
+  { nombre: "Burrito de pollo", precio: 40, palabras: ["burrito","burritos"] },
+  { nombre: "Hot cakes con fruta", precio: 35, palabras: ["hot cakes","hotcakes","hot cake"] },
+  { nombre: "Quesadillas de queso y jamón", precio: 30, palabras: ["quesadilla","quesadillas"] },
+  { nombre: "Hot dog con papas", precio: 35, palabras: ["hot dog","hotdog","hot dogs"] },
+  { nombre: "Licuado de plátano", precio: 30, palabras: ["licuado","licuado de platano"] },
+  { nombre: "Torta de milanesa", precio: 45, palabras: ["milanesa","torta de milanesa"] },
+  { nombre: "Tacos de bistec", precio: 45, palabras: ["bistec","tacos de bistec"] },
+  { nombre: "Ensalada de frutas", precio: 30, palabras: ["ensalada","ensalada de frutas"] },
+  { nombre: "Pizza individual", precio: 45, palabras: ["pizza","pizzas"] },
+  { nombre: "Club sándwich", precio: 45, palabras: ["sandwich","sándwich","club sandwich","club sándwich"] },
+  { nombre: "Waffles con fruta", precio: 40, palabras: ["waffles","wafles","waffle"] }
+];
+
+let pedidoActual = { nombre: "", grupo: "", productos: [], total: 0 };
+
+function abrirDia(dia) {
+  document.getElementById("inicio").style.display = "none";
+  document.querySelectorAll(".menu-dia").forEach(m => m.style.display = "none");
+  const sel = document.getElementById(dia);
+  if (sel) sel.style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function regresarInicio() {
+  document.querySelectorAll(".menu-dia").forEach(m => m.style.display = "none");
+  document.getElementById("inicio").style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function abrirPedido(producto, precio) {
+  pedidoActual.productos = [{ nombre: producto, precio: precio, cantidad: 1 }];
+  actualizarFormularioPedido();
+  document.getElementById("ventanaPedido").style.display = "flex";
+}
+
+function actualizarFormularioPedido() {
+  const lista = document.getElementById("listaPedido");
+  const totalElemento = document.getElementById("totalPedido");
+  if (!pedidoActual.productos.length) {
+    lista.innerHTML = "No hay productos agregados.";
+    totalElemento.textContent = "$0.00";
+    return;
+  }
+  let html = "", total = 0;
+  pedidoActual.productos.forEach(p => {
+    const subtotal = p.precio * p.cantidad;
+    total += subtotal;
+    html += `<div class="item-pedido"><span>${p.cantidad} x ${escaparHTML(p.nombre)}</span><strong>$${subtotal.toFixed(2)}</strong></div>`;
+  });
+  pedidoActual.total = total;
+  lista.innerHTML = html;
+  totalElemento.textContent = "$" + total.toFixed(2);
+}
+
+function cerrarPedido() {
+  document.getElementById("ventanaPedido").style.display = "none";
+}
+
+function confirmarPedido(event) {
+  event.preventDefault();
+  if (!pedidoActual.productos.length) { alert("Agrega al menos un producto."); return; }
+  pedidoActual.nombre = document.getElementById("nombre").value.trim();
+  pedidoActual.grupo = document.getElementById("grupo").value.trim();
+  actualizarFormularioPedido();
+  document.getElementById("ventanaPedido").style.display = "none";
+  mostrarResumenPago();
+  document.getElementById("ventanaPago").style.display = "flex";
+}
+
+function mostrarResumenPago() {
+  const resumen = document.getElementById("resumenPago");
+  const total = document.getElementById("totalPago");
+  let html = "";
+  pedidoActual.productos.forEach(p => {
+    const subtotal = p.precio * p.cantidad;
+    html += `<div class="item-pedido"><span>${p.cantidad} x ${escaparHTML(p.nombre)}</span><strong>$${subtotal.toFixed(2)}</strong></div>`;
+  });
+  resumen.innerHTML = html;
+  total.textContent = "$" + pedidoActual.total.toFixed(2);
+}
+
+function cerrarPago() { document.getElementById("ventanaPago").style.display = "none"; }
+
+function mostrarTransferencia() {
+  cerrarPago();
+  document.getElementById("montoTransferencia").textContent = "$" + pedidoActual.total.toFixed(2);
+  document.getElementById("ventanaTransferencia").style.display = "flex";
+}
+function cerrarTransferencia() { document.getElementById("ventanaTransferencia").style.display = "none"; }
+function confirmarTransferencia() {
+  const comprobante = document.getElementById("comprobante");
+  if (comprobante.files.length === 0) { alert("Por favor selecciona tu comprobante de transferencia."); return; }
+  const archivo = comprobante.files[0];
+  cerrarTransferencia();
+  mostrarPedidoRealizado("Transferencia bancaria", "📎 Comprobante: <b>" + escaparHTML(archivo.name) + "</b>");
+}
+
+function mostrarEfectivo() {
+  cerrarPago();
+  document.getElementById("pedidoEfectivo").innerHTML = generarTextoPedido();
+  document.getElementById("totalEfectivo").textContent = "$" + pedidoActual.total.toFixed(2);
+  document.getElementById("ventanaEfectivo").style.display = "flex";
+}
+function cerrarEfectivo() { document.getElementById("ventanaEfectivo").style.display = "none"; }
+function confirmarEfectivo() {
+  cerrarEfectivo();
+  mostrarPedidoRealizado("Efectivo", "📍 Recuerda realizar el pago directamente en la cafetería.");
+}
+
+function generarTextoPedido() {
+  return pedidoActual.productos.map(p => p.cantidad + " x " + escaparHTML(p.nombre)).join("<br>");
+}
+
+/* MOSTRAR PEDIDO REALIZADO: guarda el pedido en Firestore y genera el QR */
+async function mostrarPedidoRealizado(formaPago, informacionExtra) {
+  const ventana = document.getElementById("pedidoRealizado");
+  const contenedorQR = document.getElementById("qrPedido");
+  const mensaje = document.getElementById("mensajePedido");
+  ventana.style.display = "flex";
+  contenedorQR.innerHTML = "";
+  mensaje.textContent = "Guardando tu pedido...";
+  try {
+    if (typeof window.guardarPedidoEnFirestore !== "function") {
+      throw new Error("Firebase aún no está listo. Intenta de nuevo en unos segundos.");
+    }
+    const idPedido = await window.guardarPedidoEnFirestore(pedidoActual, formaPago);
+    const urlConsulta = window.location.origin + window.location.pathname + "?pedido=" + encodeURIComponent(idPedido);
+    if (typeof QRCode === "undefined") throw new Error("No se cargó el generador de QR.");
+    new QRCode(contenedorQR, {
+      text: urlConsulta, width: 220, height: 220,
+      colorDark: "#006b3f", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
+    });
+    mensaje.innerHTML =
+      "✅ ¡Pedido guardado correctamente!<br><br>" +
+      "👤 Alumno: <b>" + escaparHTML(pedidoActual.nombre) + "</b><br><br>" +
+      "🎓 Grupo: <b>" + escaparHTML(pedidoActual.grupo) + "</b><br><br>" +
+      "🍽️ Pedido:<br>" + generarTextoPedido() + "<br><br>" +
+      "💰 Total: <b>$" + Number(pedidoActual.total).toFixed(2) + "</b><br><br>" +
+      "💳 Forma de pago: <b>" + escaparHTML(formaPago) + "</b><br><br>" +
+      "🧾 ID del pedido: <b>" + escaparHTML(idPedido) + "</b><br><br>" +
+      informacionExtra + "<br><br>📱 Escanea o guarda el QR para consultar el pedido.";
+  } catch (error) {
+    console.error("Error guardando el pedido:", error);
+    contenedorQR.innerHTML = "";
+    mensaje.textContent = "No se pudo guardar el pedido. " + (error.message || "") +
+      " Revisa tu conexión y las reglas de Firestore (colección pedidos).";
+  }
+}
+
+/* DESCARGAR EL QR DEL PEDIDO */
+function descargarQRPedido() {
+  const c = document.getElementById("qrPedido");
+  const img = c ? c.querySelector("img") : null;
+  const canvas = c ? c.querySelector("canvas") : null;
+  const a = document.createElement("a");
+  a.download = "pedido-QR-cecytem.png";
+  if (img && img.src) { a.href = img.src; a.click(); }
+  else if (canvas) { a.href = canvas.toDataURL("image/png"); a.click(); }
+  else { alert("Primero confirma tu pedido para generar el QR."); }
+}
+
+function cerrarPedidoYRegresar() {
+  document.getElementById("pedidoRealizado").style.display = "none";
+  document.getElementById("ventanaPago").style.display = "none";
+  document.getElementById("ventanaPedido").style.display = "none";
+  document.getElementById("ventanaTransferencia").style.display = "none";
+  document.getElementById("ventanaEfectivo").style.display = "none";
+  const qrP = document.getElementById("qrPedido");
+  if (qrP) qrP.innerHTML = "";
+  document.getElementById("nombre").value = "";
+  document.getElementById("grupo").value = "";
+  document.getElementById("comprobante").value = "";
+  pedidoActual = { nombre: "", grupo: "", productos: [], total: 0 };
+  regresarInicio();
+}
+
+function obtenerNumero(texto) {
+  const numeros = { "cero":0,"uno":1,"una":1,"dos":2,"tres":3,"cuatro":4,"cinco":5,"seis":6,"siete":7,"ocho":8,"nueve":9,"diez":10 };
+  const escrito = texto.match(/\b(cero|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez)\b/);
+  if (escrito) return numeros[escrito[1]];
+  const n = texto.match(/\b([1-9]|10)\b/);
+  if (n) return parseInt(n[1]);
+  return 1;
+}
+
+function obtenerCantidadProducto(texto, producto) {
+  let posicion = -1;
+  for (const palabra of producto.palabras) {
+    const p = texto.indexOf(palabra);
+    if (p !== -1) { posicion = p; break; }
+  }
+  if (posicion === -1) return 1;
+  return obtenerNumero(texto.substring(Math.max(0, posicion - 25), posicion));
+}
+
+function detectarProductos(texto) {
+  const encontrados = [];
+  productosDisponibles.forEach(producto => {
+    let hay = false;
+    for (const palabra of producto.palabras) { if (texto.includes(palabra)) { hay = true; break; } }
+    if (hay) encontrados.push({ nombre: producto.nombre, precio: producto.precio, cantidad: obtenerCantidadProducto(texto, producto) });
+  });
+  return encontrados;
+}
+
+function crearPedidoMultiple(productos) {
+  pedidoActual.productos = productos;
+  actualizarFormularioPedido();
+  document.getElementById("ventanaPedido").style.display = "flex";
+  hablar("Encontré " + productos.length + " productos en tu pedido. Revisa el resumen y escribe tu nombre y grupo.");
+}
+
+/* ASISTENTE DE VOZ */
+function iniciarAsistenteVoz() {
+  const Reconocimiento = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Reconocimiento) { alert("Tu navegador no admite el reconocimiento de voz. Usa Chrome o Edge."); return; }
+  const reconocimiento = new Reconocimiento();
+  reconocimiento.lang = "es-MX";
+  reconocimiento.continuous = false;
+  reconocimiento.interimResults = false;
+  const estado = document.getElementById("estadoVoz");
+  if (estado) estado.textContent = "🎙️ Escuchando... dime tu pedido.";
+  hablar("Te escucho. Dime qué quieres pedir.");
+  reconocimiento.start();
+  reconocimiento.onresult = (evento) => {
+    const texto = evento.results[0][0].transcript.toLowerCase();
+    if (estado) estado.textContent = "🗣️ Dijiste: " + texto;
+    const productos = detectarProductos(texto);
+    if (productos.length === 0) {
+      hablar("No reconocí ningún producto del menú. Intenta de nuevo, por ejemplo: quiero dos hamburguesas.");
+    } else {
+      crearPedidoMultiple(productos);
+    }
+  };
+  reconocimiento.onerror = () => {
+    if (estado) estado.textContent = "⚠️ No pude escucharte. Intenta de nuevo.";
+    hablar("No pude escucharte bien. Intenta de nuevo.");
+  };
+}
+
+function hablar(texto) {
+  if (!("speechSynthesis" in window)) return;
+  const mensaje = new SpeechSynthesisUtterance(texto);
+  mensaje.lang = "es-MX";
+  mensaje.rate = 1;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(mensaje);
+}
+
+function escaparHTML(texto) {
+  return String(texto).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
+}
+
+/* Exponer funciones al ámbito global para los onclick y el módulo */
+window.abrirDia = abrirDia;
+window.regresarInicio = regresarInicio;
+window.abrirPedido = abrirPedido;
+window.cerrarPedido = cerrarPedido;
+window.confirmarPedido = confirmarPedido;
+window.cerrarPago = cerrarPago;
+window.mostrarTransferencia = mostrarTransferencia;
+window.cerrarTransferencia = cerrarTransferencia;
+window.confirmarTransferencia = confirmarTransferencia;
+window.mostrarEfectivo = mostrarEfectivo;
+window.cerrarEfectivo = cerrarEfectivo;
+window.confirmarEfectivo = confirmarEfectivo;
+window.mostrarPedidoRealizado = mostrarPedidoRealizado;
+window.descargarQRPedido = descargarQRPedido;
+window.cerrarPedidoYRegresar = cerrarPedidoYRegresar;
+window.iniciarAsistenteVoz = iniciarAsistenteVoz;
+window.escaparHTML = escaparHTML;
+window.hablar = hablar;
+</script>
+
+<!-- BARRA DE ADMINISTRACIÓN (solo visible tras iniciar sesión la encargada) -->
+<div id="barraAdmin" class="barra-admin" style="display:none;">
+  <span>👩‍💼 Sesión de encargada activa</span>
+  <button type="button" onclick="abrirEditorMenu()">🛠️ Editar menú</button>
+  <button type="button" onclick="cerrarSesionEncargada()">🚪 Cerrar sesión</button>
+</div>
+
+<!-- LOGIN DE ENCARGADA -->
+<div id="modalEncargada" class="modal">
+  <div class="formulario">
+    <h2>👩‍💼 Acceso de encargada</h2>
+    <p class="texto-pago">Inicia sesión para administrar el menú de la cafetería.</p>
+    <form onsubmit="iniciarSesionEncargada(event)">
+      <label for="correoEncargada">Correo:</label>
+      <input type="email" id="correoEncargada" placeholder="correo@cecytem.mx" required>
+      <label for="passwordEncargada">Contraseña:</label>
+      <input type="password" id="passwordEncargada" placeholder="Tu contraseña" required>
+      <p id="errorEncargada" style="color:#c0392b;font-size:14px;min-height:18px;"></p>
+      <button type="submit" class="btn-confirmar">Iniciar sesión</button>
+      <button type="button" class="btn-cancelar" onclick="cerrarAccesoEncargada()">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+<!-- EDITOR DE MENÚ (agregar, modificar, eliminar productos) -->
+<div id="modalEditorMenu" class="modal">
+  <div class="formulario editor-menu">
+    <h2>🛠️ Editar menú</h2>
+    <div class="editor-dias">
+      <label for="editorDia">Día a editar:</label>
+      <select id="editorDia" onchange="renderEditor()">
+        <option value="lunes">Lunes</option>
+        <option value="martes">Martes</option>
+        <option value="miercoles">Miércoles</option>
+        <option value="jueves">Jueves</option>
+        <option value="viernes">Viernes</option>
+      </select>
+    </div>
+    <div id="listaEditor" class="lista-editor"></div>
+    <h3>➕ Agregar nuevo producto</h3>
+    <div class="form-nuevo-producto">
+      <input type="text" id="nuevoNombre" placeholder="Nombre del producto">
+      <input type="text" id="nuevoDescripcion" placeholder="Descripción">
+      <input type="number" id="nuevoPrecio" placeholder="Precio" min="0" step="1">
+      <input type="number" id="nuevoDisponibles" placeholder="Disponibles" min="0" step="1" value="20">
+      <input type="text" id="nuevoImagen" placeholder="Ruta de imagen (opcional)">
+      <button type="button" class="btn-confirmar" onclick="agregarProductoEditor()">➕ Agregar</button>
+    </div>
+    <p id="estadoEditor" style="color:#006b3f;font-size:14px;min-height:18px;"></p>
+    <div class="acciones-editor">
+      <button type="button" class="btn-confirmar" onclick="guardarMenuEditado()">💾 Guardar cambios</button>
+      <button type="button" class="btn-cancelar" onclick="cerrarEditorMenu()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  getAuth, setPersistence, browserLocalPersistence,
+  signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getFirestore, collection, addDoc, doc, getDoc, setDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB-REEMPLAZA-TU-API-KEY",
+  authDomain: "cafeteria-cecytem.firebaseapp.com",
+  projectId: "cafeteria-cecytem",
+  storageBucket: "cafeteria-cecytem.appspot.com",
+  messagingSenderId: "000000000000",
+  appId: "1:000000000000:web:0000000000000000000000"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const DIAS = ["lunes","martes","miercoles","jueves","viernes"];
+
+/* MENÚ BASE: se usa la primera vez o si Firestore no tiene datos del día */
+const menuBase = {
+  lunes: [
+    { nombre: "Tacos dorados de pollo", descripcion: "Crujientes tacos con pollo deshebrado", precio: 35, disponibles: 20, imagen: "imagenes/tacos.jpg" },
+    { nombre: "Torta de jamón y queso", descripcion: "Pan suave con jamón, queso y verduras", precio: 40, disponibles: 20, imagen: "imagenes/torta.jpg" },
+    { nombre: "Yogur con fruta", descripcion: "Yogur natural con fruta fresca y granola", precio: 30, disponibles: 20, imagen: "imagenes/yogur.jpg" }
+  ],
+  martes: [
+    { nombre: "Hamburguesa", descripcion: "Carne, queso, lechuga y jitomate", precio: 50, disponibles: 20, imagen: "imagenes/hamburguesa.jpg" },
+    { nombre: "Burrito de pollo", descripcion: "Tortilla de harina con pollo y frijoles", precio: 40, disponibles: 20, imagen: "imagenes/burrito.jpg" },
+    { nombre: "Hot cakes con fruta", descripcion: "Hot cakes con miel y fruta de temporada", precio: 35, disponibles: 20, imagen: "imagenes/hotcakes.jpg" }
+  ],
+  miercoles: [
+    { nombre: "Quesadillas de queso y jamón", descripcion: "Tortilla de maíz con queso fundido", precio: 30, disponibles: 20, imagen: "imagenes/quesadillas.jpg" },
+    { nombre: "Hot dog con papas", descripcion: "Salchicha, pan y papas a la francesa", precio: 35, disponibles: 20, imagen: "imagenes/hotdog.jpg" },
+    { nombre: "Licuado de plátano", descripcion: "Licuado de plátano con leche", precio: 30, disponibles: 20, imagen: "imagenes/licuado.jpg" }
+  ],
+  jueves: [
+    { nombre: "Torta de milanesa", descripcion: "Milanesa empanizada con aguacate", precio: 45, disponibles: 20, imagen: "imagenes/milanesa.jpg" },
+    { nombre: "Tacos de bistec", descripcion: "Tacos de bistec asado con cebolla", precio: 45, disponibles: 20, imagen: "imagenes/bistec.jpg" },
+    { nombre: "Ensalada de frutas", descripcion: "Fruta picada con yogur y granola", precio: 30, disponibles: 20, imagen: "imagenes/ensalada.jpg" }
+  ],
+  viernes: [
+    { nombre: "Pizza individual", descripcion: "Pizza con queso y pepperoni", precio: 45, disponibles: 20, imagen: "imagenes/pizza.jpg" },
+    { nombre: "Club sándwich", descripcion: "Triple sándwich con pollo y tocino", precio: 45, disponibles: 20, imagen: "imagenes/sandwich.jpg" },
+    { nombre: "Waffles con fruta", descripcion: "Waffles con miel, fruta y crema", precio: 40, disponibles: 20, imagen: "imagenes/waffles.jpg" }
+  ]
+};
+
+/* Menú en memoria (se llena desde Firestore o desde menuBase) */
+let menuActual = JSON.parse(JSON.stringify(menuBase));
+
+/* CARGAR EL MENÚ DE CADA DÍA DESDE FIRESTORE (con respaldo en menuBase) */
+async function cargarMenu() {
+  for (const dia of DIAS) {
+    try {
+      const refDia = doc(db, "menus", dia);
+      const snap = await getDoc(refDia);
+      if (snap.exists() && Array.isArray(snap.data().productos) && snap.data().productos.length) {
+        menuActual[dia] = snap.data().productos;
+      } else {
+        menuActual[dia] = JSON.parse(JSON.stringify(menuBase[dia]));
+      }
+    } catch (e) {
+      console.warn("No se pudo leer el menú de", dia, "- se usa el menú base.", e);
+      menuActual[dia] = JSON.parse(JSON.stringify(menuBase[dia]));
+    }
+    renderDia(dia);
+  }
+}
+
+/* DIBUJAR LOS PRODUCTOS DE UN DÍA EN SU CONTENEDOR */
+function renderDia(dia) {
+  const contenedor = document.getElementById("productos-" + dia);
+  if (!contenedor) return;
+  const productos = menuActual[dia] || [];
+  contenedor.innerHTML = "";
+  if (!productos.length) {
+    contenedor.innerHTML = "<p style='text-align:center;color:#777;'>No hay productos disponibles este día.</p>";
+    return;
+  }
+  productos.forEach(p => {
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "producto";
+    const agotado = Number(p.disponibles) <= 0;
+    tarjeta.innerHTML =
+      '<img src="' + escaparHTML(p.imagen || "imagenes/placeholder.jpg") + '" alt="' + escaparHTML(p.nombre) + '" onerror="this.style.display=\'none\'">' +
+      '<h3>' + escaparHTML(p.nombre) + '</h3>' +
+      '<p class="descripcion">' + escaparHTML(p.descripcion || "") + '</p>' +
+      '<p class="precio">$' + Number(p.precio).toFixed(2) + '</p>' +
+      '<p class="disponibles">' + (agotado ? "❌ Agotado" : "🍽️ Disponibles: " + p.disponibles) + '</p>';
+    const boton = document.createElement("button");
+    boton.className = "btn-pedir";
+    boton.textContent = agotado ? "No disponible" : "🛒 Pedir";
+    boton.disabled = agotado;
+    boton.addEventListener("click", () => window.abrirPedido(p.nombre, Number(p.precio)));
+    tarjeta.appendChild(boton);
+    contenedor.appendChild(tarjeta);
+  });
+}
+
+/* GUARDAR EL PEDIDO EN FIRESTORE Y DEVOLVER SU ID (lo usa el QR) */
+window.guardarPedidoEnFirestore = async function (pedido, formaPago) {
+  const datos = {
+    nombre: pedido.nombre || "",
+    grupo: pedido.grupo || "",
+    productos: pedido.productos.map(p => ({ nombre: p.nombre, precio: Number(p.precio), cantidad: Number(p.cantidad) })),
+    total: Number(pedido.total) || 0,
+    formaPago: formaPago || "",
+    estado: "pendiente",
+    creado: serverTimestamp()
+  };
+  const ref = await addDoc(collection(db, "pedidos"), datos);
+  return ref.id;
+};
+
+/* CONSULTAR UN PEDIDO POR SU ID (al escanear el QR; NO requiere login) */
+async function consultarPedidoEnFirestore(idPedido) {
+  const snap = await getDoc(doc(db, "pedidos", idPedido));
+  if (!snap.exists()) return null;
+  return snap.data();
+}
+
+/* MOSTRAR LOS DATOS DEL PEDIDO AL ESCANEAR EL QR (?pedido=ID) */
+async function revisarPedidoEnURL() {
+  const params = new URLSearchParams(window.location.search);
+  const idPedido = params.get("pedido");
+  if (!idPedido) return;
+  const ventana = document.getElementById("pedidoRealizado");
+  const contenedorQR = document.getElementById("qrPedido");
+  const mensaje = document.getElementById("mensajePedido");
+  document.getElementById("qrPedidoContenedor").style.display = "none";
+  ventana.style.display = "flex";
+  contenedorQR.innerHTML = "";
+  mensaje.textContent = "Consultando el pedido...";
+  try {
+    const datos = await consultarPedidoEnFirestore(idPedido);
+    if (!datos) { mensaje.textContent = "No se encontró ningún pedido con ese código."; return; }
+    const productos = (datos.productos || []).map(p => p.cantidad + " x " + escaparHTML(p.nombre)).join("<br>");
+    mensaje.innerHTML =
+      "🧾 <b>Datos del pedido</b><br><br>" +
+      "👤 Alumno: <b>" + escaparHTML(datos.nombre || "") + "</b><br><br>" +
+      "🎓 Grupo: <b>" + escaparHTML(datos.grupo || "") + "</b><br><br>" +
+      "🍽️ Pedido:<br>" + (productos || "—") + "<br><br>" +
+      "💰 Total: <b>$" + Number(datos.total || 0).toFixed(2) + "</b><br><br>" +
+      "💳 Forma de pago: <b>" + escaparHTML(datos.formaPago || "") + "</b><br><br>" +
+      "📌 Estado: <b>" + escaparHTML(datos.estado || "pendiente") + "</b><br><br>" +
+      "🧾 ID del pedido: <b>" + escaparHTML(idPedido) + "</b>";
+  } catch (e) {
+    console.error(e);
+    mensaje.textContent = "No se pudo consultar el pedido. Revisa tu conexión.";
+  }
+}
+
+/* ===== ACCESO DE ENCARGADA ===== */
+function abrirAccesoEncargada() {
+  document.getElementById("errorEncargada").textContent = "";
+  document.getElementById("modalEncargada").style.display = "flex";
+}
+function cerrarAccesoEncargada() {
+  document.getElementById("modalEncargada").style.display = "none";
+}
+
+async function iniciarSesionEncargada(event) {
+  event.preventDefault();
+  const correo = document.getElementById("correoEncargada").value.trim();
+  const password = document.getElementById("passwordEncargada").value;
+  const error = document.getElementById("errorEncargada");
+  error.textContent = "Verificando...";
+  try {
+    await signInWithEmailAndPassword(auth, correo, password);
+    error.textContent = "";
+    cerrarAccesoEncargada();
+  } catch (e) {
+    console.error(e);
+    error.textContent = "Correo o contraseña incorrectos.";
+  }
+}
+
+async function cerrarSesionEncargada() {
+  try { await signOut(auth); } catch (e) { console.error(e); }
+}
+
+/* La barra de administración aparece SOLO si hay sesión; no redirige la página */
+onAuthStateChanged(auth, (usuario) => {
+  const barra = document.getElementById("barraAdmin");
+  if (usuario) {
+    barra.style.display = "flex";
+  } else {
+    barra.style.display = "none";
+    cerrarEditorMenu();
+  }
+});
+
+/* ===== EDITOR DE MENÚ (agregar, modificar y eliminar productos) ===== */
+function abrirEditorMenu() {
+  if (!auth.currentUser) { alert("Debes iniciar sesión como encargada."); return; }
+  document.getElementById("estadoEditor").textContent = "";
+  document.getElementById("modalEditorMenu").style.display = "flex";
+  renderEditor();
+}
+function cerrarEditorMenu() {
+  const m = document.getElementById("modalEditorMenu");
+  if (m) m.style.display = "none";
+}
+
+function diaEditorActual() {
+  return document.getElementById("editorDia").value;
+}
+
+/* Dibuja las filas editables del día seleccionado */
+function renderEditor() {
+  const dia = diaEditorActual();
+  const contenedor = document.getElementById("listaEditor");
+  const productos = menuActual[dia] || [];
+  contenedor.innerHTML = "";
+  if (!productos.length) {
+    contenedor.innerHTML = "<p style='color:#777;'>Este día no tiene productos. Agrega uno abajo.</p>";
+    return;
+  }
+  productos.forEach((p, indice) => {
+    const fila = document.createElement("div");
+    fila.className = "fila-editor";
+    fila.innerHTML =
+      '<input type="text" class="ed-nombre" value="' + escaparHTML(p.nombre) + '" placeholder="Nombre">' +
+      '<input type="text" class="ed-desc" value="' + escaparHTML(p.descripcion || "") + '" placeholder="Descripción">' +
+      '<input type="number" class="ed-precio" value="' + Number(p.precio) + '" placeholder="Precio" min="0" step="1">' +
+      '<input type="number" class="ed-disp" value="' + Number(p.disponibles) + '" placeholder="Disp." min="0" step="1">' +
+      '<input type="text" class="ed-img" value="' + escaparHTML(p.imagen || "") + '" placeholder="Imagen">';
+    const borrar = document.createElement("button");
+    borrar.type = "button";
+    borrar.className = "btn-eliminar";
+    borrar.textContent = "🗑️";
+    borrar.title = "Eliminar producto";
+    borrar.addEventListener("click", () => eliminarProductoEditor(indice));
+    fila.appendChild(borrar);
+    contenedor.appendChild(fila);
+  });
+}
+
+/* Lee las filas del editor y actualiza el menú en memoria (modificar) */
+function leerCamposEditor() {
+  const dia = diaEditorActual();
+  const filas = document.querySelectorAll("#listaEditor .fila-editor");
+  const productos = [];
+  filas.forEach(fila => {
+    const nombre = fila.querySelector(".ed-nombre").value.trim();
+    if (!nombre) return;
+    productos.push({
+      nombre: nombre,
+      descripcion: fila.querySelector(".ed-desc").value.trim(),
+      precio: Number(fila.querySelector(".ed-precio").value) || 0,
+      disponibles: Number(fila.querySelector(".ed-disp").value) || 0,
+      imagen: fila.querySelector(".ed-img").value.trim()
+    });
+  });
+  menuActual[dia] = productos;
+}
+
+function agregarProductoEditor() {
+  leerCamposEditor();
+  const dia = diaEditorActual();
+  const nombre = document.getElementById("nuevoNombre").value.trim();
+  if (!nombre) { alert("Escribe al menos el nombre del producto."); return; }
+  menuActual[dia].push({
+    nombre: nombre,
+    descripcion: document.getElementById("nuevoDescripcion").value.trim(),
+    precio: Number(document.getElementById("nuevoPrecio").value) || 0,
+    disponibles: Number(document.getElementById("nuevoDisponibles").value) || 0,
+    imagen: document.getElementById("nuevoImagen").value.trim()
+  });
+  document.getElementById("nuevoNombre").value = "";
+  document.getElementById("nuevoDescripcion").value = "";
+  document.getElementById("nuevoPrecio").value = "";
+  document.getElementById("nuevoDisponibles").value = "20";
+  document.getElementById("nuevoImagen").value = "";
+  renderEditor();
+}
+
+function eliminarProductoEditor(indice) {
+  leerCamposEditor();
+  const dia = diaEditorActual();
+  menuActual[dia].splice(indice, 1);
+  renderEditor();
+}
+
+/* Guarda el día editado en Firestore (menus/{dia}) */
+async function guardarMenuEditado() {
+  if (!auth.currentUser) { alert("Debes iniciar sesión como encargada."); return; }
+  leerCamposEditor();
+  const dia = diaEditorActual();
+  const estado = document.getElementById("estadoEditor");
+  estado.style.color = "#006b3f";
+  estado.textContent = "Guardando...";
+  try {
+    await setDoc(doc(db, "menus", dia), { productos: menuActual[dia], actualizado: serverTimestamp() });
+    renderDia(dia);
+    estado.textContent = "✅ Menú del " + dia + " guardado correctamente.";
+  } catch (e) {
+    console.error(e);
+    estado.style.color = "#c0392b";
+    estado.textContent = "❌ No se pudo guardar. Revisa las reglas de Firestore (colección menus).";
+  }
+}
+
+/* Exponer al ámbito global las funciones usadas por los onclick del HTML */
+window.abrirAccesoEncargada = abrirAccesoEncargada;
+window.cerrarAccesoEncargada = cerrarAccesoEncargada;
+window.iniciarSesionEncargada = iniciarSesionEncargada;
+window.cerrarSesionEncargada = cerrarSesionEncargada;
+window.abrirEditorMenu = abrirEditorMenu;
+window.cerrarEditorMenu = cerrarEditorMenu;
+window.renderEditor = renderEditor;
+window.agregarProductoEditor = agregarProductoEditor;
+window.guardarMenuEditado = guardarMenuEditado;
+
+/* El asistente de voz vive en el script clásico; aquí solo lo enlazamos */
+window.activarVozYAsistente = function () {
+  if (typeof window.iniciarAsistenteVoz === "function") window.iniciarAsistenteVoz();
+};
+
+/* ARRANQUE: persistencia de sesión + carga del menú + consulta por QR */
+(async function iniciar() {
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+  } catch (e) {
+    console.warn("No se pudo fijar la persistencia de sesión:", e);
+  }
+  await cargarMenu();
+  await revisarPedidoEnURL();
+})();
+</script>
+
+<script>
+/* REGISTRO DEL SERVICE WORKER (PWA) */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js").catch(err =>
+      console.warn("No se pudo registrar el service worker:", err));
+  });
+}
+</script>
+
+</body>
+</html>
